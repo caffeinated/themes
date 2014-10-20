@@ -1,5 +1,8 @@
-<?php namespace Caffeinated\Themes;
+<?php
 
+namespace Caffeinated\Themes;
+
+use Caffeinated\Themes\Handlers\ThemesHandler;
 use Illuminate\Support\ServiceProvider;
 
 class ThemesServiceProvider extends ServiceProvider {
@@ -12,13 +15,23 @@ class ThemesServiceProvider extends ServiceProvider {
 	protected $defer = false;
 
 	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$this->package('caffeinated/themes');
+	}
+
+	/**
 	 * Register the service provider.
 	 *
 	 * @return void
 	 */
 	public function register()
 	{
-		//
+		$this->registerServices();
 	}
 
 	/**
@@ -28,7 +41,26 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return ['themes.handler', 'themes'];
 	}
 
+	/**
+	 * Register the package services.
+	 *
+	 * @return void
+	 */
+	protected function registerServices()
+	{
+		$this->app->bindShared('themes.handler', function ($app) {
+			return new ThemesHandler($app['files'], $app['config'], $app['view']);
+		});
+
+		$this->app->bindShared('themes', function($app) {
+			return new Themes($app['themes.handler']);
+		});
+
+		$this->app->booting(function($app) {
+			$app['themes']->register();
+		});
+	}
 }
