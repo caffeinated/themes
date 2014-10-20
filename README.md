@@ -1,6 +1,11 @@
 Caffeinated Themes
 ==================
 [![Build Status](https://travis-ci.org/caffeinated/themes.svg?branch=master)](https://travis-ci.org/caffeinated/themes)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/caffeinated/themes/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/caffeinated/themes/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/caffeinated/themes/v/stable.svg)](https://packagist.org/packages/caffeinated/themes)
+[![Total Downloads](https://poser.pugx.org/caffeinated/themes/downloads.svg)](https://packagist.org/packages/caffeinated/themes)
+[![Latest Unstable Version](https://poser.pugx.org/caffeinated/themes/v/unstable.svg)](https://packagist.org/packages/caffeinated/themes)
+[![License](https://poser.pugx.org/caffeinated/themes/license.svg)](https://packagist.org/packages/caffeinated/themes)
 
 Laravel 5.0 Themes Package with support for the Caffeinated Modules package.
 
@@ -8,7 +13,7 @@ Laravel 5.0 Themes Package with support for the Caffeinated Modules package.
 
 Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.0. This gives an easy way to further decouple the way your web application looks from your code base.
 
-The Caffeinated Themes package comes with support for the Caffeinated Modules package as well. Views will intelligently cascade through a fallback system is using and loading module view files.
+The Caffeinated Themes package comes with support for the Caffeinated Modules package as well. Views will intelligently cascade through a fallback system if using and loading module view files.
 
 - Checks if the active theme has the requested module view file (e.g. `/public/themes/bootstrap/views/modules/blog/index.blade.php`)
 - If the theme does not have the requested module view file, it will fallback to loading the view file supplied with your module (e.g. `/app/Modules/Blog/Resources/Views/index.blade.php`)
