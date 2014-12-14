@@ -89,6 +89,7 @@ class Themes
 	/**
 	 * Sets active theme during runtime.
 	 *
+	 * @param  string $theme
 	 * @return Self
 	 */
 	public function setActive($theme)
@@ -98,9 +99,27 @@ class Themes
 
 	/**
 	 * Render view from defined theme.
+	 *
+	 * @param string $view
+	 * @param array  $data
+	 * @return Response
 	 */
-	public function view($view, $data = array(), $mergeData = array())
+	public function view($view, $data = array())
 	{
-		return $this->handler->view($view, $data, $mergeData);
+		return $this->handler->view($view, $data);
+	}
+
+	/**
+	 * Return theme view response from the application.
+	 *
+	 * @param string $view
+	 * @param array  $data
+	 * @param int    $status
+	 * @param array  $headers
+	 * @return Response
+	 */
+	public function view($view, $data = array(), $status = 200, array $headers = array())
+	{
+		return $this->handler->response($view, $data, $status, $headers);
 	}
 }

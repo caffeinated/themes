@@ -5,7 +5,8 @@ namespace Caffeinated\Themes\Handlers;
 use Illuminate\Config\Repository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\View\Factory as View;
+use Illuminate\Http\Response;
+use Illuminate\View\Factory as ViewFactory;
 
 class ThemesHandler
 {
@@ -22,7 +23,7 @@ class ThemesHandler
 	/**
 	 * @var View
 	 */
-	protected $views;
+	protected $viewFactory;
 
 	/**
 	 * @var string
@@ -40,11 +41,11 @@ class ThemesHandler
 	 * @param Filesystem $files
 	 * @param Repository $confid
 	 */
-	public function __construct(Filesystem $files, Repository $config, View $views)
+	public function __construct(Filesystem $files, Repository $config, ViewFactory $viewFactory)
 	{
-		$this->config = $config;
-		$this->files  = $files;
-		$this->views  = $views;
+		$this->config       = $config;
+		$this->files        = $files;
+		$this->viewFactory  = $viewFactory;
 	}
 
 	/**
@@ -131,12 +132,12 @@ class ThemesHandler
 	 * @param array $mergeData
 	 * @return View
 	 */
-	public function view($view, $data = array(), $mergeData = array())
+	public function view($view, $data = array())
 	{
 		$themeView = $this->getThemeNamespace($view);
 
 		if (class_exists('Caffeinated\Modules\Modules')) {
-			if ( ! $this->views->exists($themeView)) {
+			if ( ! $this->viewFactory->exists($themeView)) {
 				$viewSegments = explode('.', $view);
 
 				if ($viewSegments[0] == 'modules') {
@@ -146,14 +147,28 @@ class ThemesHandler
 
 					$moduleView = "{$module}::{$view}";
 
-					return $this->views->make($moduleView, $data, $mergeData);
+					return $this->viewFactory->make($moduleView, $data);
 				}
 			} else {
-				return $this->views->make($themeView, $data, $mergeData);
+				return $this->viewFactory->make($themeView, $data);
 			}
 		} else {
-			return $this->views->make($themeView, $data, $mergeData);
+			return $this->viewFactory->make($themeView, $data);
 		}		
+	}
+
+	/**
+	 * Return a new theme view response from the application.
+	 *
+	 * @param  string  $view
+	 * @param  array   $data
+	 * @param  int     $status
+	 * @param  array   $headers
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function response($view, $data = array(), $status = 200, array $headers = array())
+	{
+		return new Response($this->view($view, $data), $status, $headers);
 	}
 
 	/**
@@ -164,7 +179,7 @@ class ThemesHandler
 	 */
 	public function registerNamespace($theme)
 	{
-		$this->views->addNamespace($theme, $this->getThemePath($theme).'views/');
+		$this->viewFactory->addNamespace($theme, $this->getThemePath($theme).'views/');
 	}
 
 	/**
