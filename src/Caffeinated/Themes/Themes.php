@@ -118,7 +118,7 @@ class Themes
 	 * @param array  $headers
 	 * @return Response
 	 */
-	public function view($view, $data = array(), $status = 200, array $headers = array())
+	public function response($view, $data = array(), $status = 200, array $headers = array())
 	{
 		return $this->handler->response($view, $data, $status, $headers);
 	}
