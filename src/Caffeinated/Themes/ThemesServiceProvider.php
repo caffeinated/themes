@@ -21,7 +21,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->package('caffeinated/themes');
+		$this->registerResources();
 
 		$this->registerServices();
 	}
@@ -34,6 +34,25 @@ class ThemesServiceProvider extends ServiceProvider {
 	public function provides()
 	{
 		return ['themes.handler', 'themes'];
+	}
+
+	/**
+	 * Register the package resources.
+	 *
+	 * @return void
+	 */
+	protected function registerResources()
+	{
+		$userConfigFile    = app()->configPath().'/caffeinated/themes.php';
+		$packageConfigFile = __DIR__.'/../../config/config.php';
+		$config            = $this->app['files']->getRequire($packageConfigFile);
+
+		if (file_exists($userConfigFile)) {
+			$userConfig = $this->app['files']->getRequire($userConfigFile);
+			$config     = array_replace_recursive($config, $userConfig);
+		}
+
+		$this->app['config']->set('caffeinated::themes', $config);
 	}
 
 	/**

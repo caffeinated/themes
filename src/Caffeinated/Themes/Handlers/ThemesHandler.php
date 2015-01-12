@@ -75,7 +75,7 @@ class ThemesHandler
 	 */
 	public function getPath()
 	{
-		return $this->path ?: $this->config->get('themes::config.path');
+		return $this->path ?: $this->config->get('caffeinated::themes.path');
 	}
 
 	/**
@@ -98,7 +98,7 @@ class ThemesHandler
 	 */
 	public function getActive()
 	{
-		return $this->active ?: $this->config->get('themes::config.active');
+		return $this->active ?: $this->config->get('caffeinated::themes.active');
 	}
 
 	/**
