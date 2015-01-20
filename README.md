@@ -1,11 +1,11 @@
 Caffeinated Themes
 ==================
-[![Build Status](https://travis-ci.org/caffeinated/themes.svg?branch=master)](https://travis-ci.org/caffeinated/themes)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/caffeinated/themes/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/caffeinated/themes/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/caffeinated/themes/v/stable.svg)](https://packagist.org/packages/caffeinated/themes)
-[![Total Downloads](https://poser.pugx.org/caffeinated/themes/downloads.svg)](https://packagist.org/packages/caffeinated/themes)
-[![Latest Unstable Version](https://poser.pugx.org/caffeinated/themes/v/unstable.svg)](https://packagist.org/packages/caffeinated/themes)
-[![License](https://poser.pugx.org/caffeinated/themes/license.svg)](https://packagist.org/packages/caffeinated/themes)
+[![Laravel](https://img.shields.io/badge/Laravel-5.0-orange.svg?style=flat-square)](http://laravel.com)
+[![Source](http://img.shields.io/badge/source-caffeinated/themes-blue.svg?style=flat-square)](https://github.com/caffeinated/themes)
+[![Build Status](http://img.shields.io/travis/caffeinated/themes/master.svg?style=flat-square)](https://travis-ci.org/caffeinated/themes)
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/caffeinated/themes.svg?style=flat-square)](https://scrutinizer-ci.com/g/caffeinated/themes/?branch=master)
+[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/caffeinated/themes.svg?style=flat-square)](https://scrutinizer-ci.com/g/caffeinated/themes/?branch=master)
+[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
 Laravel 5.0 Themes Package with support for the Caffeinated Modules package.
 
