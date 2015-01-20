@@ -7,10 +7,6 @@ Caffeinated Themes
 [![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/caffeinated/themes.svg?style=flat-square)](https://scrutinizer-ci.com/g/caffeinated/themes/?branch=master)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
-Laravel 5.0 Themes Package with support for the Caffeinated Modules package.
-
----
-
 Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.0. This gives an easy way to further decouple the way your web application looks from your code base.
 
 The Caffeinated Themes package comes with support for the Caffeinated Modules package as well. Views will intelligently cascade through a fallback system if using and loading module view files.
