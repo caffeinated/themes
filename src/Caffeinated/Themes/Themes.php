@@ -1,26 +1,51 @@
 <?php
-
 namespace Caffeinated\Themes;
 
-use Caffeinated\Themes\Handlers\ThemesHandler;
+use Illuminate\Config\Repository;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\Response;
+use Illuminate\View\Factory as ViewFactory;
 
 class Themes
 {
 	/**
-	 * @var ModulesHandler
+	 * @var Repository
 	 */
-	protected $handler;
+	protected $config;
+	
+	/**
+	 * @var Filesystem
+	 */
+	protected $files;
+
+	/**
+	 * @var View
+	 */
+	protected $viewFactory;
+
+	/**
+	 * @var string
+	 */
+	protected $path;
+
+	/**
+	 * @var string
+	 */
+	protected $active;
 
 	/**
 	 * Constructor method.
 	 *
-	 * @param ModulesHandler $handle
-	 * @param Repository $config
-	 * @param Translator $lang
+	 * @param Filesystem  $files
+	 * @param Repository  $config
+	 * @param ViewFactory $viewFactory
 	 */
-	public function __construct(ThemesHandler $handler)
+	public function __construct(Filesystem $files, Repository $config, ViewFactory $viewFactory)
 	{
-		$this->handler = $handler;
+		$this->config      = $config;
+		$this->files       = $files;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -41,9 +66,9 @@ class Themes
 	 * @param string $theme
 	 * @return null
 	 */
-	protected function registerNamespace($theme)
+	public function registerNamespace($theme)
 	{
-		$this->handler->registerNamespace($theme);
+		$this->viewFactory->addNamespace($theme, $this->getThemePath($theme).'views/');
 	}
 
 	/**
@@ -53,27 +78,40 @@ class Themes
 	 */
 	public function all()
 	{
-		return $this->handler->all();
+		$themes = [];
+
+		if ($this->files->exists($this->getPath())) {
+			$scannedThemes = $this->files->directories($this->getPath());
+
+			foreach ($scannedThemes as $theme) {
+				$themes[] = basename($theme);
+			}
+		}		
+
+		return new Collection($themes);
 	}
 
 	/**
-	 * Get themes path.
+	 * Gets themes path.
 	 *
 	 * @return string
 	 */
 	public function getPath()
 	{
-		return $this->handler->getPath();
+		return $this->path ?: $this->config->get('caffeinated::themes.path');
 	}
 
 	/**
-	 * Set themes path in "RunTime" mode.
+	 * Sets themes path.
 	 *
-	 * @return string
+	 * @param string $path
+	 * @return self
 	 */
 	public function setPath($path)
 	{
-		return $this->handler->setPath($path);
+		$this->path = $path;
+
+		return $this;
 	}
 
 	/**
@@ -83,43 +121,87 @@ class Themes
 	 */
 	public function getActive()
 	{
-		return $this->handler->getActive();
+		return $this->active ?: $this->config->get('caffeinated::themes.active');
 	}
 
 	/**
-	 * Sets active theme during runtime.
+	 * Gets active theme.
 	 *
-	 * @param  string $theme
 	 * @return Self
 	 */
 	public function setActive($theme)
 	{
-		return $this->handler->setActive($theme);
+		$this->active = $theme;
+
+		return $this;
 	}
 
 	/**
-	 * Render view from defined theme.
+	 * Render theme view file.
 	 *
 	 * @param string $view
-	 * @param array  $data
-	 * @return Response
+	 * @param array $data
+	 * @param array $mergeData
+	 * @return View
 	 */
 	public function view($view, $data = array())
 	{
-		return $this->handler->view($view, $data);
+		$themeView = $this->getThemeNamespace($view);
+
+		if (class_exists('Caffeinated\Modules\Modules')) {
+			if ( ! $this->viewFactory->exists($themeView)) {
+				$viewSegments = explode('.', $view);
+
+				if ($viewSegments[0] == 'modules') {
+					$module = $viewSegments[1];
+
+					$view = implode('.', array_slice($viewSegments, 2));
+
+					$moduleView = "{$module}::{$view}";
+
+					return $this->viewFactory->make($moduleView, $data);
+				}
+			} else {
+				return $this->viewFactory->make($themeView, $data);
+			}
+		} else {
+			return $this->viewFactory->make($themeView, $data);
+		}		
 	}
 
 	/**
-	 * Return theme view response from the application.
+	 * Return a new theme view response from the application.
 	 *
-	 * @param string $view
-	 * @param array  $data
-	 * @param int    $status
-	 * @param array  $headers
-	 * @return Response
+	 * @param  string  $view
+	 * @param  array   $data
+	 * @param  int     $status
+	 * @param  array   $headers
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function response($view, $data = array(), $status = 200, array $headers = array())
 	{
-		return $this->handler->response($view, $data, $status, $headers);
+		return new Response($this->view($view, $data), $status, $headers);
+	}
+
+	/**
+	 * Gets the specified themes path.
+	 *
+	 * @param string $theme
+	 * @return string
+	 */
+	public function getThemePath($theme)
+	{
+		return $this->getPath()."/{$theme}/";
+	}
+
+	/**
+	 * Get the specified themes View namespace.
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	protected function getThemeNamespace($key)
+	{
+		return $this->getActive()."::{$key}";
 	}
 }
