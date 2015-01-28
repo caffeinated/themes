@@ -65,7 +65,7 @@ class Components
 		$this->blade->extend(function($view, $compiler) use ($name) {
 			$pattern = $compiler->createMatcher($name);
 
-			$replace = '$1<?php echo ThemeComponent::'.$name.'$2; ?>';
+			$replace = '$1<?php echo Component::'.$name.'$2; ?>';
 
 			return preg_replace($pattern, $replace, $view);
 		});
