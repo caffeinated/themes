@@ -148,6 +148,8 @@ class Themes
 	{
 		$themeView = $this->getThemeNamespace($view);
 
+		$this->autoloadComponents($this->getActive());
+
 		if (class_exists('Caffeinated\Modules\Modules')) {
 			if ( ! $this->viewFactory->exists($themeView)) {
 				$viewSegments = explode('.', $view);
@@ -203,5 +205,22 @@ class Themes
 	protected function getThemeNamespace($key)
 	{
 		return $this->getActive()."::{$key}";
+	}
+
+	/**
+	 * Autoload a themes compontents file.
+	 *
+	 * @param  string $theme
+	 * @return null
+	 */
+	protected function autoloadComponents($theme)
+	{
+		$path               = $this->getPath();
+		$themePath          = $path.'/'.$theme;
+		$componentsFilePath = $themePath.'/components.php';
+
+		if (file_exists($componentsFilePath)) {
+			include ($componentsFilePath);
+		}		
 	}
 }

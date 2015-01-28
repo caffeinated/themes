@@ -33,7 +33,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return ['themes'];
+		return ['themes', 'themes.components'];
 	}
 
 	/**
@@ -64,6 +64,12 @@ class ThemesServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('themes', function($app) {
 			return new Themes($app['files'], $app['config'], $app['view']);
+		});
+
+		$this->app->bindShared('themes.components', function($app) {
+			$blade = $app['view']->getEngineResolver()->resolve('blade')->getCompiler();
+
+			return new Components($blade, $app);
 		});
 
 		$this->app->booting(function($app) {
