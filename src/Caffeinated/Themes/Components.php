@@ -4,19 +4,19 @@ namespace Caffeinated\Themes;
 use Closure;
 use Illuminate\Support\Str;
 use Illuminate\Container\Container;
-use Illuminate\View\Compilers\BladeCompiler;
+use Caffeinated\Themes\Engines\Engine;
 
 class Components
 {
 	/**
-	 * @var BladeCompiler
-	 */
-	protected $blade;
-
-	/**
 	 * @var Container
 	 */
 	protected $container;
+
+	/**
+	 * @var Engine
+	 */
+	protected $engine;
 
 	/**
 	 * @var array
@@ -34,10 +34,10 @@ class Components
 	 * @param BladeCompiler $blade
 	 * @param Container     $container
 	 */
-	public function __construct(BladeCompiler $blade, Container $container)
+	public function __construct(Container $container, Engine $engine)
 	{
-		$this->blade     = $blade;
 		$this->container = $container;
+		$this->engine    = $engine;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Components
 	{
 		$this->components[$name] = $callback;
 
-		$this->registerBlade($name);
+		$this->registerTag($name, 'Component::');
 	}
 
 	/**
@@ -60,15 +60,9 @@ class Components
 	 * @param  string $name
 	 * @return void
 	 */
-	protected function registerBlade($name)
+	protected function registerTag($method, $namespace = '')
 	{
-		$this->blade->extend(function($view, $compiler) use ($name) {
-			$pattern = $compiler->createMatcher($name);
-
-			$replace = '$1<?php echo Component::'.$name.'$2; ?>';
-
-			return preg_replace($pattern, $replace, $view);
-		});
+		return $this->engine->registerCustomTag($method, $namespace);
 	}
 
 	/**
@@ -157,7 +151,7 @@ class Components
 	{
 		$this->groups[$name] = $components;
 
-		$this->registerBlade($name);
+		$this->registerTag($name, 'Component::');
 	}
 
 	/**

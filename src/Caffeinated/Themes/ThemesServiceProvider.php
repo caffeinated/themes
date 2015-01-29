@@ -24,6 +24,8 @@ class ThemesServiceProvider extends ServiceProvider {
 		$this->registerResources();
 
 		$this->registerServices();
+
+		$this->configureTwig();
 	}
 
 	/**
@@ -33,7 +35,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return ['themes', 'themes.components'];
+		return ['themes', 'themes.components', 'themes.engine',];
 	}
 
 	/**
@@ -66,14 +68,40 @@ class ThemesServiceProvider extends ServiceProvider {
 			return new Themes($app['files'], $app['config'], $app['view']);
 		});
 
-		$this->app->bindShared('themes.components', function($app) {
-			$blade = $app['view']->getEngineResolver()->resolve('blade')->getCompiler();
+		$this->app->bindShared('themes.engine', function ($app) {
+			$engine = ucfirst($this->app['config']->get('caffeinated::themes.engine'));
 
-			return new Components($blade, $app);
+			return $app->make('\Caffeinated\Themes\Engines\\'.$engine.'Engine');
+		});
+
+		$this->app->bindShared('themes.components', function($app) {
+			return new Components($app, $app['themes.engine']);
 		});
 
 		$this->app->booting(function($app) {
 			$app['themes']->register();
 		});
+	}
+
+	/**
+	 * Configure Twig
+	 *
+	 * Registers the necessary Caffeinated Themes extensions and facades
+	 * with Twig; only if Twig is set as the template engine.
+	 *
+	 * @return null
+	 */
+	protected function configureTwig()
+	{
+		$engine = $this->app['config']->get('caffeinated::themes.engine');
+		
+		if ($engine == 'twig') {
+			$this->app['config']->push(
+				'twigbridge.extensions.enabled',
+				'Caffeinated\Themes\Twig\Extensions\Component'
+			);
+			
+			// dd ($this->app['config']->get('twigbridge'));
+		}
 	}
 }
