@@ -18,7 +18,7 @@ class BladeEngine implements Engine
 	public function registerCustomTag($method, $namespace = '')
 	{
 		$this->blade->extend(function($view, $compiler) use ($method, $namespace) {
-			$pattern = $compiler->createMatcher($method);
+			$pattern = $compiler->createMatcher('component_'.$method);
 
 			$replace = '$1<?php echo '.$namespace.$method.'$2; ?>';
 

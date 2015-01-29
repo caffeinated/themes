@@ -15,7 +15,7 @@ class Component extends Twig_Extension
 	public function getFunctions()
 	{
 		return [
-			new Twig_SimpleFunction('*', function ($name) {
+			new Twig_SimpleFunction('component_*', function ($name) {
 					$arguments = array_slice(func_get_args(), 1);
 
 					return \Component::call($name, $arguments);
