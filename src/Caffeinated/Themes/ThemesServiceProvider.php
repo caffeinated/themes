@@ -14,6 +14,13 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	protected $defer = false;
 
+	public function boot()
+	{
+		$this->publishes([
+			__DIR__.'/../../config/themes.php' => config_path('themes.php'),
+		]);
+	}
+
 	/**
 	 * Register the service provider.
 	 *
@@ -21,7 +28,11 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->registerResources();
+		$this->mergeConfigFrom(
+		    __DIR__.'/../../config/themes.php', 'caffeinated.themes'
+		);
+
+		// $this->registerResources();
 
 		$this->registerServices();
 
@@ -35,26 +46,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return ['themes', 'themes.components', 'themes.engine',];
-	}
-
-	/**
-	 * Register the package resources.
-	 *
-	 * @return void
-	 */
-	protected function registerResources()
-	{
-		$userConfigFile    = app()->configPath().'/caffeinated/themes.php';
-		$packageConfigFile = __DIR__.'/../../config/config.php';
-		$config            = $this->app['files']->getRequire($packageConfigFile);
-
-		if (file_exists($userConfigFile)) {
-			$userConfig = $this->app['files']->getRequire($userConfigFile);
-			$config     = array_replace_recursive($config, $userConfig);
-		}
-
-		$this->app['config']->set('caffeinated::themes', $config);
+		return ['themes', 'themes.components', 'themes.engine'];
 	}
 
 	/**
@@ -69,7 +61,7 @@ class ThemesServiceProvider extends ServiceProvider {
 		});
 
 		$this->app->bindShared('themes.engine', function ($app) {
-			$engine = ucfirst($this->app['config']->get('caffeinated::themes.engine'));
+			$engine = ucfirst($this->app['config']->get('themes.engine'));
 
 			return $app->make('\Caffeinated\Themes\Engines\\'.$engine.'Engine');
 		});
@@ -93,7 +85,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	protected function configureTwig()
 	{
-		$engine = $this->app['config']->get('caffeinated::themes.engine');
+		$engine = $this->app['config']->get('themes.engine');
 		
 		if ($engine == 'twig') {
 			$this->app['config']->push(

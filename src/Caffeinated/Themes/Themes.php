@@ -121,7 +121,7 @@ class Themes
 	 */
 	public function getPath()
 	{
-		return $this->path ?: $this->config->get('caffeinated::themes.path');
+		return $this->path ?: $this->config->get('caffeinated.themes.path');
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Themes
 	 */
 	public function getActive()
 	{
-		return $this->active ?: $this->config->get('caffeinated::themes.active');
+		return $this->active ?: $this->config->get('caffeinated.themes.active');
 	}
 
 	/**
@@ -224,7 +224,7 @@ class Themes
 	 */
 	protected function renderView($view, $data)
 	{
-		$engine = $this->config->get('caffeinated::themes.engine');
+		$engine = $this->config->get('caffeinated.themes.engine');
 
 		if (! is_null($this->layout) and $engine == 'blade') {
 			return $this->layoutView->nest('child', $view, $data);
