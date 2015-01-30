@@ -100,8 +100,6 @@ class ThemesServiceProvider extends ServiceProvider {
 				'twigbridge.extensions.enabled',
 				'Caffeinated\Themes\Twig\Extensions\Component'
 			);
-			
-			// dd ($this->app['config']->get('twigbridge'));
 		}
 	}
 }

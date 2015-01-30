@@ -1,6 +1,7 @@
 <?php
 namespace Caffeinated\Themes;
 
+use Caffeinated\Themes\Engines\Engine;
 use Illuminate\Config\Repository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
@@ -40,11 +41,17 @@ class Themes
 	protected $layout;
 
 	/**
+	 * @var string
+	 */
+	protected $layoutView;
+
+	/**
 	 * Constructor method.
 	 *
 	 * @param Filesystem  $files
 	 * @param Repository  $config
 	 * @param ViewFactory $viewFactory
+	 * @param Engine      $engine
 	 */
 	public function __construct(Filesystem $files, Repository $config, ViewFactory $viewFactory)
 	{
@@ -172,7 +179,7 @@ class Themes
 	protected function setupLayout()
 	{
 		if (! is_null($this->layout)) {
-			$this->layout = $this->viewFactory->make($this->layout);
+			$this->layoutView = $this->viewFactory->make($this->layout);
 		}
 	}
 
@@ -188,41 +195,44 @@ class Themes
 	{
 		$this->setupLayout();
 
-		$themeView = $this->getThemeNamespace($view);
+		$viewNamespace = $this->getThemeNamespace($view);
 
 		$this->autoloadComponents($this->getActive());
 
+		// Caffeinated Modules support
 		if (class_exists('Caffeinated\Modules\Modules')) {
-			if ( ! $this->viewFactory->exists($themeView)) {
+			if ( ! $this->viewFactory->exists($viewNamespace)) {
 				$viewSegments = explode('.', $view);
 
 				if ($viewSegments[0] == 'modules') {
-					$module = $viewSegments[1];
-
-					$view = implode('.', array_slice($viewSegments, 2));
-
-					$moduleView = "{$module}::{$view}";
-
-					if (! is_null($this->layout)) {
-						return $this->layout->nest('child', $moduleView, $data);
-					}
-
-					return $this->viewFactory->make($moduleView, $data);
+					$module        = $viewSegments[1];
+					$view          = implode('.', array_slice($viewSegments, 2));
+					$viewNamespace = "{$module}::{$view}";
 				}
-			} else {
-				if (! is_null($this->layout)) {
-					return $this->layout->nest('child', $themeView, $data);
-				}
-
-				return $this->viewFactory->make($themeView, $data);
 			}
-		} else {
-			if (! is_null($this->layout)) {
-				return $this->layout->nest('child', $themeView, $data);
-			}
-
-			return $this->viewFactory->make($themeView, $data);
 		}
+
+		return $this->renderView($viewNamespace, $data);
+	}
+
+	/**
+	 * Renders the defined view.
+	 *
+	 * @param  string $view
+	 * @param  mixed  $data
+	 * @return viewFactory
+	 */
+	protected function renderView($view, $data)
+	{
+		$engine = $this->config->get('caffeinated::themes.engine');
+
+		if (! is_null($this->layout) and $engine == 'blade') {
+			return $this->layoutView->nest('child', $view, $data);
+		} elseif(! is_null($this->layout) and $engine == 'twig') {
+			$data['layout'] = $this->layout;
+		}
+
+		return $this->viewFactory->make($view, $data);
 	}
 
 	/**
