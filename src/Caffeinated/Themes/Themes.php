@@ -35,6 +35,11 @@ class Themes
 	protected $active;
 
 	/**
+	 * @var string
+	 */
+	protected $layout;
+
+	/**
 	 * Constructor method.
 	 *
 	 * @param Filesystem  $files
@@ -68,7 +73,7 @@ class Themes
 	 */
 	public function registerNamespace($theme)
 	{
-		$this->viewFactory->addNamespace($theme, $this->getThemePath($theme).'views/');
+		$this->viewFactory->addNamespace($theme, $this->getThemePath($theme).'views');
 	}
 
 	/**
@@ -136,7 +141,7 @@ class Themes
 	}
 
 	/**
-	 * Gets active theme.
+	 * Sets active theme.
 	 *
 	 * @return Self
 	 */
@@ -145,6 +150,30 @@ class Themes
 		$this->active = $theme;
 
 		return $this;
+	}
+
+	/**
+	 * Sets theme layout.
+	 *
+	 * @return Self
+	 */
+	public function setLayout($layout)
+	{
+		$this->layout = $this->getThemeNamespace($layout);
+
+		return $this;
+	}
+
+	/**
+	 * Setup layout.
+	 *
+	 * @return null
+	 */
+	protected function setupLayout()
+	{
+		if (! is_null($this->layout)) {
+			$this->layout = $this->viewFactory->make($this->layout);
+		}
 	}
 
 	/**
@@ -157,6 +186,8 @@ class Themes
 	 */
 	public function view($view, $data = array())
 	{
+		$this->setupLayout();
+
 		$themeView = $this->getThemeNamespace($view);
 
 		$this->autoloadComponents($this->getActive());
@@ -172,14 +203,26 @@ class Themes
 
 					$moduleView = "{$module}::{$view}";
 
+					if (! is_null($this->layout)) {
+						return $this->layout->nest('child', $moduleView, $data);
+					}
+
 					return $this->viewFactory->make($moduleView, $data);
 				}
 			} else {
+				if (! is_null($this->layout)) {
+					return $this->layout->nest('child', $themeView, $data);
+				}
+
 				return $this->viewFactory->make($themeView, $data);
 			}
 		} else {
+			if (! is_null($this->layout)) {
+				return $this->layout->nest('child', $themeView, $data);
+			}
+
 			return $this->viewFactory->make($themeView, $data);
-		}		
+		}
 	}
 
 	/**
