@@ -92,6 +92,17 @@ class Themes
 	}
 
 	/**
+	 * Check if given theme exists.
+	 *
+	 * @param  string $theme
+	 * @return bool
+	 */
+	public function exists($theme)
+	{
+		return in_array($theme, $this->all()->toArray());
+	}
+
+	/**
 	 * Gets themes path.
 	 *
 	 * @return string
@@ -194,6 +205,101 @@ class Themes
 	public function getThemePath($theme)
 	{
 		return $this->getPath()."/{$theme}/";
+	}
+
+	/**
+	 * Get path of theme JSON file.
+	 *
+	 * @param  string $theme
+	 * @return string
+	 */
+	public function getJsonPath($theme)
+	{
+		return $this->getThemePath($theme).'/theme.json';
+	}
+
+	/**
+	 * Get theme JSON content as an array.
+	 *
+	 * @param  string $theme
+	 * @return array|mixed
+	 */
+	public function getJsonContents($theme)
+	{
+		$theme = strtolower($theme);
+
+		$default = [];
+
+		if ( ! $this->exists($theme))
+			return $default;
+
+		$path = $this->getJsonPath($theme);
+
+		if ($this->files->exists($path)) {
+			$contents = $this->files->get($path);
+
+			return json_decode($contents, true);
+		} else {
+			$message = "Theme [{$theme}] must have a valid theme.json manifest file.";
+
+			throw new FileMissingException($message);
+		}
+	}
+
+	/**
+	 * Set theme manifest JSON content property value.
+	 *
+	 * @param  string $theme
+	 * @param  array  $content
+	 * @return integer
+	 */
+	public function setJsonContents($theme, array $content)
+	{
+		$content = json_encode($content, JSON_PRETTY_PRINT);
+
+		return $this->files->put($this->getJsonPath($theme), $content);
+	}
+
+	/**
+	 * Get a theme manifest property value.
+	 *
+	 * @param  string      $property
+	 * @param  null|string $default
+	 * @return mixed
+	 */
+	public function getProperty($property, $default = null)
+	{
+		list($theme, $key) = explode('::', $property);
+
+		return array_get($this->getJsonContents($theme), $key, $default);
+	}
+
+	/**
+	 * Set a theme manifest property value.
+	 *
+	 * @param  string $property
+	 * @param  mixed  $value
+	 * @return bool
+	 */
+	public function setProperty($property, $value)
+	{
+		list($theme, $key) = explode('::', $property);
+
+		$content = $this->getJsonContents($theme);
+
+		if (count($content)) {
+			if (isset($content[$key])) {
+				unset($content[$key]);
+			}
+
+			$content[$key] = $value;
+
+			$this->setJsonContents($theme, $content);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
