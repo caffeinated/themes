@@ -41,11 +41,6 @@ class Themes
 	protected $layout;
 
 	/**
-	 * @var string
-	 */
-	protected $layoutView;
-
-	/**
 	 * Constructor method.
 	 *
 	 * @param Filesystem  $files
@@ -172,15 +167,13 @@ class Themes
 	}
 
 	/**
-	 * Setup layout.
+	 * Get theme layout.
 	 *
-	 * @return null
+	 * @return string
 	 */
-	protected function setupLayout()
+	public function getLayout()
 	{
-		if (! is_null($this->layout)) {
-			$this->layoutView = $this->viewFactory->make($this->layout);
-		}
+		return $this->layout;
 	}
 
 	/**
@@ -193,8 +186,6 @@ class Themes
 	 */
 	public function view($view, $data = array())
 	{
-		$this->setupLayout();
-
 		$viewNamespace = $this->getThemeNamespace($view);
 
 		$this->autoloadComponents($this->getActive());
@@ -224,12 +215,8 @@ class Themes
 	 */
 	protected function renderView($view, $data)
 	{
-		$engine = $this->config->get('caffeinated.themes.engine');
-
-		if (! is_null($this->layout) and $engine == 'blade') {
-			return $this->layoutView->nest('child', $view, $data);
-		} elseif(! is_null($this->layout) and $engine == 'twig') {
-			$data['layout'] = $this->layout;
+		if (! is_null($this->layout)) {
+			$data['theme_layout'] = $this->getLayout();
 		}
 
 		return $this->viewFactory->make($view, $data);

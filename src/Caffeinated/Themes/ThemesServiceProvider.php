@@ -14,10 +14,17 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	protected $defer = false;
 
+	/**
+	 * Boot the service provider.
+	 *
+	 * @return null
+	 */
 	public function boot()
 	{
+		// dd($this->app->databasePath());
+
 		$this->publishes([
-			__DIR__.'/../../config/themes.php' => config_path('themes.php'),
+			__DIR__.'/../../config/themes.php' => config_path('themes.php')
 		]);
 	}
 
@@ -31,8 +38,6 @@ class ThemesServiceProvider extends ServiceProvider {
 		$this->mergeConfigFrom(
 		    __DIR__.'/../../config/themes.php', 'caffeinated.themes'
 		);
-
-		// $this->registerResources();
 
 		$this->registerServices();
 
@@ -56,10 +61,6 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	protected function registerServices()
 	{
-		$this->app->bindShared('themes', function($app) {
-			return new Themes($app['files'], $app['config'], $app['view']);
-		});
-
 		$this->app->bindShared('themes.engine', function ($app) {
 			$engine = ucfirst($this->app['config']->get('themes.engine'));
 
@@ -68,6 +69,10 @@ class ThemesServiceProvider extends ServiceProvider {
 
 		$this->app->bindShared('themes.components', function($app) {
 			return new Components($app, $app['themes.engine']);
+		});
+
+		$this->app->bindShared('themes', function($app) {
+			return new Themes($app['files'], $app['config'], $app['view']);
 		});
 
 		$this->app->booting(function($app) {
