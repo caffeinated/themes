@@ -46,12 +46,11 @@ class Themes
 	 * @param Filesystem  $files
 	 * @param Repository  $config
 	 * @param ViewFactory $viewFactory
-	 * @param Engine      $engine
 	 */
 	public function __construct(Filesystem $files, Repository $config, ViewFactory $viewFactory)
 	{
-		$this->config      = $config;
 		$this->files       = $files;
+		$this->config      = $config;
 		$this->viewFactory = $viewFactory;
 	}
 
@@ -145,7 +144,7 @@ class Themes
 	/**
 	 * Sets active theme.
 	 *
-	 * @return Self
+	 * @return Themes
 	 */
 	public function setActive($theme)
 	{
@@ -157,7 +156,7 @@ class Themes
 	/**
 	 * Sets theme layout.
 	 *
-	 * @return Self
+	 * @return Themes
 	 */
 	public function setLayout($layout)
 	{
@@ -181,7 +180,6 @@ class Themes
 	 *
 	 * @param string $view
 	 * @param array $data
-	 * @param array $mergeData
 	 * @return View
 	 */
 	public function view($view, $data = array())

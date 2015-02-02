@@ -2,7 +2,6 @@
 namespace Caffeinated\Themes;
 
 use Closure;
-use Illuminate\Support\Str;
 use Illuminate\Container\Container;
 use Caffeinated\Themes\Engines\Engine;
 
@@ -31,8 +30,8 @@ class Components
 	/**
 	 * Constructor method.
 	 *
-	 * @param BladeCompiler $blade
-	 * @param Container     $container
+	 * @param Container $container
+	 * @param Engine    $engine
 	 */
 	public function __construct(Container $container, Engine $engine)
 	{
@@ -43,8 +42,8 @@ class Components
 	/**
 	 * Register a new component.
 	 *
-	 * @param  string         $name
-	 * @param  strin|callable $callback
+	 * @param  string          $name
+	 * @param  string|callable $callback
 	 * @return void
 	 */
 	public function register($name, $callback)
@@ -57,7 +56,8 @@ class Components
 	/**
 	 * Register Blade syntax for a specific component.
 	 *
-	 * @param  string $name
+	 * @param  string $method
+	 * @param  string $namespace
 	 * @return void
 	 */
 	protected function registerTag($method, $namespace = '')
@@ -170,7 +170,7 @@ class Components
 	 *
 	 * @param  string $name
 	 * @param  array  $parameters
-	 * @return mixed
+	 * @return null|string
 	 */
 	public function callGroup($name, $parameters = array())
 	{

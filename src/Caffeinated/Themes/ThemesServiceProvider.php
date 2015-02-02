@@ -1,8 +1,6 @@
 <?php
-
 namespace Caffeinated\Themes;
 
-use Caffeinated\Themes\Handlers\ThemesHandler;
 use Illuminate\Support\ServiceProvider;
 
 class ThemesServiceProvider extends ServiceProvider {
@@ -21,8 +19,6 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		// dd($this->app->databasePath());
-
 		$this->publishes([
 			__DIR__.'/../../config/themes.php' => config_path('themes.php')
 		]);
@@ -47,7 +43,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	/**
 	 * Get the services provided by the provider.
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public function provides()
 	{
