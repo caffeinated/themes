@@ -5,7 +5,7 @@ use Closure;
 use Illuminate\Container\Container;
 use Caffeinated\Themes\Engines\Engine;
 
-class Components implements Engine
+class Components
 {
 	/**
 	 * @var Container
