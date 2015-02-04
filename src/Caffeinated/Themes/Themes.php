@@ -10,6 +10,16 @@ use Illuminate\View\Factory as ViewFactory;
 class Themes
 {
 	/**
+	 * @var string
+	 */
+	protected $active;
+
+	/**
+	 * @var array
+	 */
+	protected $components;
+
+	/**
 	 * @var Repository
 	 */
 	protected $config;
@@ -20,9 +30,9 @@ class Themes
 	protected $files;
 
 	/**
-	 * @var View
+	 * @var string
 	 */
-	protected $viewFactory;
+	protected $layout;
 
 	/**
 	 * @var string
@@ -30,14 +40,9 @@ class Themes
 	protected $path;
 
 	/**
-	 * @var string
+	 * @var View
 	 */
-	protected $active;
-
-	/**
-	 * @var string
-	 */
-	protected $layout;
+	protected $viewFactory;
 
 	/**
 	 * Constructor method.
@@ -153,6 +158,16 @@ class Themes
 	}
 
 	/**
+	 * Get theme layout.
+	 *
+	 * @return string
+	 */
+	public function getLayout()
+	{
+		return $this->layout;
+	}
+
+	/**
 	 * Sets theme layout.
 	 *
 	 * @return Themes
@@ -165,16 +180,6 @@ class Themes
 	}
 
 	/**
-	 * Get theme layout.
-	 *
-	 * @return string
-	 */
-	public function getLayout()
-	{
-		return $this->layout;
-	}
-
-	/**
 	 * Render theme view file.
 	 *
 	 * @param string $view
@@ -184,20 +189,24 @@ class Themes
 	public function view($view, $data = array())
 	{
 		$viewNamespace = $this->getThemeNamespace($view);
+		$activeTheme   = $this->getActive();
+		$parent        = $this->getProperty($activeTheme.'::parent');
 
-		$this->autoloadComponents($this->getActive());
+		$this->autoloadComponents($activeTheme);
 
 		// Caffeinated Modules support
-		if (class_exists('Caffeinated\Modules\Modules')) {
-			if ( ! $this->viewFactory->exists($viewNamespace)) {
-				$viewSegments = explode('.', $view);
+		if (class_exists('Caffeinated\Modules\Modules') and ! $this->viewFactory->exists($viewNamespace)) {
+			$viewSegments = explode('.', $view);
 
-				if ($viewSegments[0] == 'modules') {
-					$module        = $viewSegments[1];
-					$view          = implode('.', array_slice($viewSegments, 2));
-					$viewNamespace = "{$module}::{$view}";
-				}
+			if ($viewSegments[0] == 'modules') {
+				$module        = $viewSegments[1];
+				$view          = implode('.', array_slice($viewSegments, 2));
+				$viewNamespace = "{$module}::{$view}";
 			}
+		}
+
+		if (! empty($parent) and ! $this->viewFactory->exists($viewNamespace)) {
+			$viewNamespace = $this->getThemeNamespace($view, $parent);
 		}
 
 		return $this->renderView($viewNamespace, $data);
@@ -345,9 +354,13 @@ class Themes
 	 * @param string $key
 	 * @return string
 	 */
-	protected function getThemeNamespace($key)
+	protected function getThemeNamespace($key, $theme = null)
 	{
-		return $this->getActive()."::{$key}";
+		if (is_null($theme)) {
+			return $this->getActive()."::{$key}";
+		} else {
+			return $theme."::{$key}";
+		}		
 	}
 
 	/**
@@ -358,9 +371,20 @@ class Themes
 	 */
 	protected function autoloadComponents($theme)
 	{
+		$activeTheme        = $this->getActive();
 		$path               = $this->getPath();
+		$parent             = $this->getProperty($activeTheme.'::parent');
 		$themePath          = $path.'/'.$theme;
 		$componentsFilePath = $themePath.'/components.php';
+
+		if (! empty($parent)) {
+			$parentPath               = $path.'/'.$parent;
+			$parentComponentsFilePath = $parentPath.'/components.php';
+
+			if (file_exists($parentPath)) {
+				include ($parentComponentsFilePath);
+			}
+		}
 
 		if (file_exists($componentsFilePath)) {
 			include ($componentsFilePath);
