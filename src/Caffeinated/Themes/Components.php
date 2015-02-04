@@ -3,7 +3,6 @@ namespace Caffeinated\Themes;
 
 use Closure;
 use Illuminate\Container\Container;
-use Caffeinated\Themes\Engines\Engine;
 
 class Components
 {
@@ -33,7 +32,7 @@ class Components
 	 * @param Container $container
 	 * @param Engine    $engine
 	 */
-	public function __construct(Container $container, Engine $engine)
+	public function __construct(Container $container, $engine)
 	{
 		$this->container = $container;
 		$this->engine    = $engine;
