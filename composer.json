@@ -17,8 +17,8 @@
         "illuminate/config": ">=5.0.0"
     },
     "autoload": {
-        "psr-0": {
-            "Caffeinated\\Themes": "src/"
+        "psr-4": {
+            "Caffeinated\\Themes\\": "src/Caffeinated/Themes/"
         }
     },
     "extra": {
