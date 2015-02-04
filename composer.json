@@ -20,11 +20,5 @@
         "psr-4": {
             "Caffeinated\\Themes\\": "src/Caffeinated/Themes/"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    },
-    "minimum-stability": "dev"
+    }
 }
