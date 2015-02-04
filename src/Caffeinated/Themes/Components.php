@@ -36,8 +36,8 @@ class Components
 	/**
 	 * Constructor method.
 	 *
-	 * @param Container $container
-	 * @param Engine    $engine
+	 * @param Container     $container
+	 * @param BladeCompiler $blade
 	 */
 	public function __construct(Container $container, BladeCompiler $blade)
 	{

@@ -53,8 +53,8 @@ class Themes
 	 */
 	public function __construct(Filesystem $files, Repository $config, ViewFactory $viewFactory)
 	{
-		$this->files       = $files;
 		$this->config      = $config;
+		$this->files       = $files;
 		$this->viewFactory = $viewFactory;
 	}
 
@@ -188,8 +188,9 @@ class Themes
 	 */
 	public function view($view, $data = array())
 	{
-		$activeTheme = $this->getActive();
-		$parent      = $this->getProperty($activeTheme.'::parent');
+		$activeTheme   = $this->getActive();
+		$parent        = $this->getProperty($activeTheme.'::parent');
+		$viewNamespace = null;
 
 		$views = [
 			'theme'  => $this->getThemeNamespace($view),
