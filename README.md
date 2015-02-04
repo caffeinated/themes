@@ -19,8 +19,6 @@ Documentation
 -------------
 You will find user friendly documentation here: [Themes Documentation](http://codex.caffeinated.ninja/themes)
 
-The raw Markdown files for the documentation can be found here: [Caffeinated Docs Repository - Themes](https://github.com/caffeinated-docs/themes)
-
 Quick Installation
 ------------------
 Begin by installing the package through Composer. The best way to do this is through your terminal via Composer itself:
