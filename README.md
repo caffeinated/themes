@@ -32,12 +32,13 @@ Once this operation is complete, simply add both the service provider and facade
 
 ### Service Provider
 ```
-'Caffeinated\Themes\ThemesServiceProvider'
+'Caffeinated\Themes\ThemesServiceProvider',
 ```
 
 ### Facade
 ```
-'Theme' => 'Caffeinated\Themes\Facades\Theme'
+'Theme'     => 'Caffeinated\Themes\Facades\Theme',
+'Component' => 'Caffeinated\Themes\Facades\Component',
 ```
 
 And that's it! With your coffee in reach, start building some awesome themes!
