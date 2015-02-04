@@ -34,7 +34,7 @@ Once this operation is complete, simply add both the service provider and facade
 'Caffeinated\Themes\ThemesServiceProvider',
 ```
 
-### Facade
+### Facades
 ```
 'Theme'     => 'Caffeinated\Themes\Facades\Theme',
 'Component' => 'Caffeinated\Themes\Facades\Component',
