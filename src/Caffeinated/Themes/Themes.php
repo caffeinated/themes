@@ -188,31 +188,21 @@ class Themes
 	 */
 	public function view($view, $data = array())
 	{
-		$viewNamespace = $this->getThemeNamespace($view);
-		$activeTheme   = $this->getActive();
-		$parent        = $this->getProperty($activeTheme.'::parent');
+		$activeTheme = $this->getActive();
+		$parent      = $this->getProperty($activeTheme.'::parent');
 
-		$this->autoloadComponents($activeTheme);
+		$views = [
+			'theme'  => $this->getThemeNamespace($view),
+			'parent' => $this->getThemeNamespace($view, $parent),
+			'module' => $this->getModuleView($view),
+			'base'   => $view
+		];
 
-		// Caffeinated Modules support
-		if (class_exists('Caffeinated\Modules\Modules') and ! $this->viewFactory->exists($viewNamespace)) {
-			$viewSegments = explode('.', $view);
-
-			if ($viewSegments[0] == 'modules') {
-				$module        = $viewSegments[1];
-				$view          = implode('.', array_slice($viewSegments, 2));
-				$viewNamespace = "{$module}::{$view}";
+		foreach ($views as $view) {
+			if ($this->viewFactory->exists($view)) {
+				$viewNamespace = $view;
+				break;
 			}
-		}
-
-		// Check parent theme
-		if (! empty($parent) and ! $this->viewFactory->exists($viewNamespace)) {
-			$viewNamespace = $this->getThemeNamespace($view, $parent);
-		}
-
-		// Default to base views
-		if (! $this->viewFactory->exists($viewNamespace)) {
-			$viewNamespace = $view;
 		}
 
 		return $this->renderView($viewNamespace, $data);
@@ -227,6 +217,8 @@ class Themes
 	 */
 	protected function renderView($view, $data)
 	{
+		$this->autoloadComponents($this->getActive());
+
 		if (! is_null($this->layout)) {
 			$data['theme_layout'] = $this->getLayout();
 		}
@@ -395,5 +387,27 @@ class Themes
 		if (file_exists($componentsFilePath)) {
 			include ($componentsFilePath);
 		}		
+	}
+
+	/**
+	 * Get module view file.
+	 *
+	 * @param  string $view
+	 * @return null|string
+	 */
+	protected function getModuleView($view)
+	{
+		if (class_exists('Caffeinated\Modules\Modules')) {
+			$viewSegments = explode('.', $view);
+
+			if ($viewSegments[0] == 'modules') {
+				$module = $viewSegments[1];
+				$view   = implode('.', array_slice($viewSegments, 2));
+
+				return "{$module}::{$view}";
+			}
+		}
+
+		return null;
 	}
 }
