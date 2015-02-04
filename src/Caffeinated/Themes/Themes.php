@@ -205,8 +205,14 @@ class Themes
 			}
 		}
 
+		// Check parent theme
 		if (! empty($parent) and ! $this->viewFactory->exists($viewNamespace)) {
 			$viewNamespace = $this->getThemeNamespace($view, $parent);
+		}
+
+		// Default to base views
+		if (! $this->viewFactory->exists($viewNamespace)) {
+			$viewNamespace = $view;
 		}
 
 		return $this->renderView($viewNamespace, $data);
