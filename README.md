@@ -3,8 +3,6 @@ Caffeinated Themes
 [![Laravel](https://img.shields.io/badge/Laravel-5.0-orange.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-caffeinated/themes-blue.svg?style=flat-square)](https://github.com/caffeinated/themes)
 [![Build Status](http://img.shields.io/travis/caffeinated/themes/master.svg?style=flat-square)](https://travis-ci.org/caffeinated/themes)
-[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/caffeinated/themes.svg?style=flat-square)](https://scrutinizer-ci.com/g/caffeinated/themes/?branch=master)
-[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/caffeinated/themes.svg?style=flat-square)](https://scrutinizer-ci.com/g/caffeinated/themes/?branch=master)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
 Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.0. This gives an easy way to further decouple the way your web application looks from your code base.
