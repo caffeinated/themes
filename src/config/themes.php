@@ -8,7 +8,8 @@ return [
 	|--------------------------------------------------------------------------
 	|
 	| Assign the default active theme to be used if one is not set during
-	| runtime.
+	| runtime. This is especially useful if you're developing a very basic
+	| application that does not require dynamically changing the theme.
 	|
 	*/
 
