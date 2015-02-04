@@ -2,8 +2,9 @@
 namespace Caffeinated\Themes;
 
 use Closure;
-use Illuminate\Container\Container;
 use Caffeinated\Themes\Engines\Engine;
+use Illuminate\Container\Container;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class Components
 {
@@ -11,6 +12,11 @@ class Components
 	 * @var Container
 	 */
 	protected $container;
+
+	/**
+	 * @var BladeCompiler
+	 */
+	protected $blade;
 
 	/**
 	 * @var Engine
@@ -33,10 +39,10 @@ class Components
 	 * @param Container $container
 	 * @param Engine    $engine
 	 */
-	public function __construct(Container $container, Engine $engine)
+	public function __construct(Container $container, BladeCompiler $blade)
 	{
 		$this->container = $container;
-		$this->engine    = $engine;
+		$this->blade     = $blade;
 	}
 
 	/**
@@ -62,7 +68,13 @@ class Components
 	 */
 	protected function registerTag($method, $namespace = '')
 	{
-		return $this->engine->registerCustomTag($method, $namespace);
+		$this->blade->extend(function($view, $compiler) use ($method, $namespace) {
+			$pattern = $compiler->createMatcher('component_'.$method);
+
+			$replace = '$1<?php echo '.$namespace.$method.'$2; ?>';
+
+			return preg_replace($pattern, $replace, $view);
+		});
 	}
 
 	/**
