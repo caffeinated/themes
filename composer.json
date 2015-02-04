@@ -20,5 +20,8 @@
         "psr-4": {
             "Caffeinated\\Themes\\": "src/Caffeinated/Themes/"
         }
+    },
+    "suggest": {
+        "rcrowe/twigBridge": "Allows the ability to utilize Twig as the templating engine"
     }
 }
