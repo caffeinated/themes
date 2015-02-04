@@ -7,12 +7,13 @@ Caffeinated Themes
 
 Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.0. This gives an easy way to further decouple the way your web application looks from your code base.
 
-The Caffeinated Themes package comes with support for the Caffeinated Modules package as well. Views will intelligently cascade through a fallback system if using and loading module view files.
-
-- Checks if the active theme has the requested module view file (e.g. `/public/themes/bootstrap/views/modules/blog/index.blade.php`)
-- If the theme does not have the requested module view file, it will fallback to loading the view file supplied with your module (e.g. `/app/Modules/Blog/Resources/Views/index.blade.php`)
-
----
+Features
+--------
+- Supports Caffeinated Modules
+- Supports both the Blade and Twig templating engines
+- Intelligent fallback view support
+- Child/parent theme inheritance
+- Theme components, easily create re-usable UI components
 
 Documentation
 -------------
