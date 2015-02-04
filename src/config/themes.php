@@ -24,6 +24,8 @@ return [
 	| use Twig, be sure to install the twigbridge package and register it's
 	| service provider BEFORE the Caffeinated Themes service provider.
 	|
+	| Available Settings: "blade", "twig"
+	|
 	*/
 
 	'engine' => 'blade',
