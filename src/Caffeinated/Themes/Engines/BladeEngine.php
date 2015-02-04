@@ -3,7 +3,7 @@ namespace Caffeinated\Themes\Engines;
 
 use Illuminate\View\Compilers\BladeCompiler;
 
-class BladeEngine extends Engine
+class BladeEngine implements Engine
 {
 	/**
 	 * @var BladeCompiler

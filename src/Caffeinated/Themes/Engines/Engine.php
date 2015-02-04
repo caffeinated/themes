@@ -1,10 +1,7 @@
 <?php
 namespace Caffeinated\Themes\Engines;
 
-abstract class Engine
+interface Engine
 {
-	public function registerCustomTag($method, $namespace)
-	{
-		// 
-	}
+	public function registerCustomTag($method, $namespace);
 }

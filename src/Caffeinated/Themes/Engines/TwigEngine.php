@@ -1,7 +1,7 @@
 <?php
 namespace Caffeinated\Themes\Engines;
 
-class TwigEngine extends Engine
+class TwigEngine implements Engine
 {
 	public function registerCustomTag($method, $namespace)
 	{

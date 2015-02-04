@@ -57,14 +57,12 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	protected function registerServices()
 	{
-		$this->app->bindShared('themes.engine', function ($app) {
-			$engine = ucfirst($this->app['config']->get('themes.engine'));
+		$engine = ucfirst($this->app['config']->get('themes.engine'));
 
-			return $app->make('\Caffeinated\Themes\Engines\\'.$engine.'Engine');
-		});
+		$this->app->bind('themes.engine', '\Caffeinated\Themes\Engines\\'.$engine.'Engine');
 
 		$this->app->bindShared('themes.components', function($app) {
-			return new Components($app, $app['themes.engine']);
+			return new Components($app, $app->make('themes.engine'));
 		});
 
 		$this->app->bindShared('themes', function($app) {
