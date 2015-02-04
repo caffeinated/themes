@@ -1,12 +1,11 @@
 <?php
 namespace Caffeinated\Themes\Engines;
 
-use TwigBridge\Twig\Loader;
-
-class TwigEngine implements Engine
+class TwigEngine extends Engine
 {
-	public function registerCustomTag($method, $namespace = '')
+	public function registerCustomTag($method, $namespace)
 	{
-		// Handled automatically within the package's registration method
+		// Everything is handled automatically within the package's registration method
 	}
+	
 }
