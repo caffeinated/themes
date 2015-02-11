@@ -86,7 +86,7 @@ class ThemesServiceProvider extends ServiceProvider {
 		
 		if ($engine == 'twig') {
 			$this->app['config']->push(
-				'twigbridge.extensions.enabled',
+				'sapling.extensions',
 				'Caffeinated\Themes\Twig\Extensions\Component'
 			);
 		}
