@@ -119,7 +119,7 @@ class Themes
 	 */
 	public function getPath()
 	{
-		return $this->path ?: $this->config->get('caffeinated.themes.path');
+		return $this->path ?: $this->config->get('themes.path');
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Themes
 	 */
 	public function getActive()
 	{
-		return $this->active ?: $this->config->get('caffeinated.themes.active');
+		return $this->active ?: $this->config->get('themes.active');
 	}
 
 	/**
