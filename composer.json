@@ -1,7 +1,7 @@
 {
     "name": "caffeinated/themes",
     "description": "Laravel 5 Themes",
-    "keywords": ["themes", "laravel", "caffeinated"],
+    "keywords": ["themes", "laravel", "caffeinated", "blade", "twig"],
     "license": "MIT",
     "authors": [
         {
@@ -22,6 +22,6 @@
         }
     },
     "suggest": {
-        "rcrowe/twigBridge": "Allows the ability to utilize Twig as the templating engine"
+        "caffeinated/sapling": "Laravel 5.0 Twig integration package"
     }
 }
