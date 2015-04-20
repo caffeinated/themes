@@ -356,8 +356,17 @@ class Themes
 	 */
 	public function asset($asset)
 	{
-		return url($this->config->get('themes.path.base')).'/'
-			.$this->getActive()
+		$segments = explode('::', $asset);
+		$theme    = null;
+
+		if (count($segments) == 2) {
+			list($theme, $asset) = $segments;
+		} else {			
+			$asset = $segments[0];
+		}
+
+		return '/'.$this->config->get('themes.paths.base').'/'
+			.($theme ?: $this->getActive()).'/'
 			.$this->config->get('themes.paths.assets').'/'
 			.$asset;
 	}
