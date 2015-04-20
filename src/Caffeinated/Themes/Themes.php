@@ -120,7 +120,7 @@ class Themes
 	 */
 	public function getPath()
 	{
-		return $this->path ?: $this->config->get('themes.path');
+		return $this->path ?: $this->config->get('themes.paths.absolute');
 	}
 
 	/**
@@ -356,9 +356,9 @@ class Themes
 	 */
 	public function asset($asset)
 	{
-		return $this->config->get('themes.base_url').'/'
+		return url($this->config->get('themes.path.base')).'/'
 			.$this->getActive()
-			.$this->config->get('themes.assets_directory').'/'
+			.$this->config->get('themes.paths.assets').'/'
 			.$asset;
 	}
 

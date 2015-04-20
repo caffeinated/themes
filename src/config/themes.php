@@ -32,41 +32,52 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Path to Themes
+	| Theme Paths
 	|--------------------------------------------------------------------------
-	|
-	| Define the path where you'd like to store your themes. Note that if you
-	| choose a path that's outside of your public directory, you will still need
-	| to store your assets (CSS, images, etc.) within your public directory.
 	|
 	*/
 
-	'path' => public_path('themes'),
+	'paths' => [
 
-	/*
-	|--------------------------------------------------------------------------
-	| Base URL
-	|--------------------------------------------------------------------------
-	|
-	| Define the base URL where your themes will be publically available. This
-	| is used to generate the correct URL when utilizing both the asset() and
-	| secureAsset() methods.
-	|
-	*/
+		/*
+		|----------------------------------------------------------------------
+		| Absolute Path
+		|----------------------------------------------------------------------
+		|
+		| Define the absolute path where you'd like to store your themes. Note
+		| that if you choose a path that's outside of your public directory, you
+		| will still need to store your assets within your public directory.
+		|
+		*/
 
-	'base_url' => url('themes'),
+		'absolute' => public_path('themes'),
 
-	/*
-	|--------------------------------------------------------------------------
-	| Assets Directory
-	|--------------------------------------------------------------------------
-	|
-	| Define the directory that will store all assets for each of your themes.
-	| This is used to generate the correct URL when utilizing both the asset()
-	| and secureAsset() methods.
-	|
-	*/
+		/*
+		|----------------------------------------------------------------------
+		| Base Path
+		|----------------------------------------------------------------------
+		|
+		| Define the base path where your themes will be publically available.
+		| This is used to generate the correct URL when utilizing both the
+		| asset() and secureAsset() methods.
+		|
+		*/
 
-	'assets_directory' => 'assets',
+		'base' => 'themes',
+
+		/*
+		|----------------------------------------------------------------------
+		| Assets Path
+		|----------------------------------------------------------------------
+		|
+		| Define the path that will store all assets for each of your themes.
+		| This is used to generate the correct URL when utilizing both the
+		| asset() and secureAsset() methods.
+		|
+		*/
+
+		'assets' => 'assets',
+
+	]
 
 ];
