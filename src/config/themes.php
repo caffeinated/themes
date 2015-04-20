@@ -43,4 +43,30 @@ return [
 
 	'path' => public_path('themes'),
 
+	/*
+	|--------------------------------------------------------------------------
+	| Base URL
+	|--------------------------------------------------------------------------
+	|
+	| Define the base URL where your themes will be publically available. This
+	| is used to generate the correct URL when utilizing both the asset() and
+	| secureAsset() methods.
+	|
+	*/
+
+	'base_url' => url('themes'),
+
+	/*
+	|--------------------------------------------------------------------------
+	| Assets Directory
+	|--------------------------------------------------------------------------
+	|
+	| Define the directory that will store all assets for each of your themes.
+	| This is used to generate the correct URL when utilizing both the asset()
+	| and secureAsset() methods.
+	|
+	*/
+
+	'assets_directory' => 'assets',
+
 ];

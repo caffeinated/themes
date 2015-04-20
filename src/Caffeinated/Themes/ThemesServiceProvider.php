@@ -85,10 +85,8 @@ class ThemesServiceProvider extends ServiceProvider {
 		$engine = $this->app['config']->get('themes.engine');
 		
 		if ($engine == 'twig') {
-			$this->app['config']->push(
-				'sapling.extensions',
-				'Caffeinated\Themes\Twig\Extensions\Component'
-			);
+			$this->app['config']->push('sapling.extensions', 'Caffeinated\Themes\Twig\Extensions\Component');
+			$this->app['config']->push('sapling.extensions', 'Caffeinated\Themes\Twig\Extensions\Themes');
 		}
 	}
 }
