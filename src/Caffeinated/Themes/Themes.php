@@ -361,7 +361,7 @@ class Themes
 
 		if (count($segments) == 2) {
 			list($theme, $asset) = $segments;
-		} else {			
+		} else {
 			$asset = $segments[0];
 		}
 
