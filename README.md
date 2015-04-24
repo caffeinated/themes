@@ -24,7 +24,13 @@ Quick Installation
 Begin by installing the package through Composer. The best way to do this is through your terminal via Composer itself:
 
 ```
-composer require caffeinated/themes
+"repositories":[{
+    "type": "vcs",
+    "url": "https://github.com/UnderlineWords/Laravel-Theme"
+}],
+"require": {
+    "caffeinated/themes": "dev-master"
+},
 ```
 
 Once this operation is complete, simply add both the service provider and facade classes to your project's `config/app.php` file:
