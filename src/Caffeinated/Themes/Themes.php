@@ -24,7 +24,7 @@ class Themes
 	 * @var Repository
 	 */
 	protected $config;
-	
+
 	/**
 	 * @var Filesystem
 	 */
@@ -97,7 +97,7 @@ class Themes
 			foreach ($scannedThemes as $theme) {
 				$themes[] = basename($theme);
 			}
-		}		
+		}
 
 		return new Collection($themes);
 	}
@@ -220,6 +220,7 @@ class Themes
 	protected function renderView($view, $data)
 	{
 		$this->autoloadComponents($this->getActive());
+		$this->addBonsai($this->getActive());
 
 		if (! is_null($this->layout)) {
 			$data['theme_layout'] = $this->getLayout();
@@ -394,7 +395,7 @@ class Themes
 			return $this->getActive()."::{$key}";
 		} else {
 			return $theme."::{$key}";
-		}		
+		}
 	}
 
 	/**
@@ -422,7 +423,38 @@ class Themes
 
 		if (file_exists($componentsFilePath)) {
 			include ($componentsFilePath);
-		}		
+		}
+	}
+
+	/**
+	 * Add bonsai.json file is the Caffeinated Bonsai package
+	 * is present in the application.
+	 *
+	 * @param  string $theme
+	 * @return null
+	 */
+	protected function addBonsai($theme)
+	{
+		if (class_exists('Caffeinated\Bonsai\Bonsai')) {
+			$activeTheme = $this->getActive();
+			$path        = $this->getPath();
+			$parent      = $this->getProperty($activeTheme.'::parent');
+			$themePath   = $path.'/'.$theme;
+			$bonsaiPath  = $themePath.'/bonsai.json';
+
+			if (! empty($parent)) {
+				$parentPath       = $path.'/'.$parent;
+				$parentBonsaiPath = $parentPath.'/bonsai.json';
+
+				if (file_exists($parentBonsaiPath)) {
+					\Bonsai::add($parentBonsaiPath);
+				}
+			}
+
+			if (file_exists($bonsaiPath)) {
+				\Bonsai::add($bonsaiPath);
+			}
+		}
 	}
 
 	/**
