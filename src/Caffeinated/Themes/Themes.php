@@ -181,17 +181,15 @@ class Themes
 	}
 
 	/**
-	 * Render theme view file.
+	 * Gets the given view file.
 	 *
-	 * @param string $view
-	 * @param array $data
-	 * @return View
+	 * @param  string  $view
+	 * @return string|null
 	 */
-	public function view($view, $data = array())
+	public function getView($view)
 	{
-		$activeTheme   = $this->getActive();
-		$parent        = $this->getProperty($activeTheme.'::parent');
-		$viewNamespace = null;
+		$activeTheme = $this->getActive();
+		$parent      = $this->getProperty($activeTheme.'::parent');
 
 		$views = [
 			'theme'  => $this->getThemeNamespace($view),
@@ -202,22 +200,21 @@ class Themes
 
 		foreach ($views as $view) {
 			if ($this->viewFactory->exists($view)) {
-				$viewNamespace = $view;
-				break;
+				return $view;
 			}
 		}
 
-		return $this->renderView($viewNamespace, $data);
+		return false;
 	}
 
 	/**
-	 * Renders the defined view.
+	 * Render theme view file.
 	 *
-	 * @param  string $view
-	 * @param  mixed  $data
-	 * @return viewFactory
+	 * @param string $view
+	 * @param array $data
+	 * @return View
 	 */
-	protected function renderView($view, $data)
+	public function view($view, $data = array())
 	{
 		$this->autoloadComponents($this->getActive());
 		$this->addBonsai($this->getActive());
@@ -226,7 +223,18 @@ class Themes
 			$data['theme_layout'] = $this->getLayout();
 		}
 
-		return $this->viewFactory->make($view, $data);
+		return $this->viewFactory->make($this->getView($view), $data);
+	}
+
+	/**
+	 * Checks if the given view file exists (anywhere).
+	 *
+	 * @param  string  $view
+	 * @return bool
+	 */
+	public function viewExists($view)
+	{
+		return ($this->getView($view)) ? true : false;
 	}
 
 	/**
