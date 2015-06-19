@@ -175,7 +175,7 @@ class Themes
 	 */
 	public function setLayout($layout)
 	{
-		$this->layout = $this->getThemeNamespace($layout);
+		$this->layout = $this->getView($layout);
 
 		return $this;
 	}
