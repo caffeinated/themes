@@ -7,6 +7,8 @@ Caffeinated Themes
 
 Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.0 and Laravel 5.1. This gives an easy way to further decouple the way your web application looks from your code base.
 
+The package follows the FIG standards PSR-1, PSR-2, and PSR-4 to ensure a high level of interoperability between shared PHP code. At the moment the package is not unit tested, but is planned to be covered later down the road.
+
 Features
 --------
 - Supports Caffeinated Modules
