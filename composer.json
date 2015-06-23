@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "5.0.*",
-        "illuminate/filesystem": "5.0.*",
-        "illuminate/view": "5.0.*",
-        "illuminate/config": "5.0.*"
+        "php": ">=5.5.9",
+        "illuminate/support": "5.1.*",
+        "illuminate/filesystem": "5.1.*",
+        "illuminate/view": "5.1.*",
+        "illuminate/config": "5.1.*"
     },
     "autoload": {
         "psr-4": {
@@ -22,6 +22,6 @@
         }
     },
     "suggest": {
-        "caffeinated/sapling": "Laravel 5.0 Twig integration package"
+        "caffeinated/sapling": "Laravel 5 Twig integration package"
     }
 }

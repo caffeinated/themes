@@ -1,11 +1,11 @@
 Caffeinated Themes
 ==================
-[![Laravel](https://img.shields.io/badge/Laravel-5.0-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel 5.0](https://img.shields.io/badge/Laravel-5.0-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel 5.1](https://img.shields.io/badge/Laravel-5.1-orange.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-caffeinated/themes-blue.svg?style=flat-square)](https://github.com/caffeinated/themes)
-[![Build Status](http://img.shields.io/travis/caffeinated/themes/master.svg?style=flat-square)](https://travis-ci.org/caffeinated/themes)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
-Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.0. This gives an easy way to further decouple the way your web application looks from your code base.
+Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.0 and Laravel 5.1. This gives an easy way to further decouple the way your web application looks from your code base.
 
 Features
 --------
@@ -21,23 +21,40 @@ You will find user friendly documentation here: [Themes Documentation](http://co
 
 Quick Installation
 ------------------
-Begin by installing the package through Composer. The best way to do this is through your terminal via Composer itself:
+Begin by installing the package through Composer. Depending on what version of Laravel you are using (5.0 or 5.1), you'll want to pull in the `~1.0` or `~2.0` release, respectively:
 
+#### Laravel 5.0.x
 ```
-composer require caffeinated/themes
+composer require caffeinated/themes=~1.0
+```
+
+#### Laravel 5.1.x
+```
+composer require caffeinated/themes=~2.0
 ```
 
 Once this operation is complete, simply add both the service provider and facade classes to your project's `config/app.php` file:
 
-### Service Provider
-```
+#### Laravel 5.0.x
+##### Service Provider
+```php
 'Caffeinated\Themes\ThemesServiceProvider',
 ```
 
-### Facades
+##### Facade
+```php
+'Theme' => 'Caffeinated\Themes\Facades\Theme',
 ```
-'Theme'     => 'Caffeinated\Themes\Facades\Theme',
-'Component' => 'Caffeinated\Themes\Facades\Component',
+
+#### Laravel 5.1.x
+##### Service Provider
+```php
+Caffeinated\Themes\ThemesServiceProvider::class,
+```
+
+##### Facade
+```php
+'Theme' => Caffeinated\Themes\Facades\Theme::class,
 ```
 
 And that's it! With your coffee in reach, start building some awesome themes!
