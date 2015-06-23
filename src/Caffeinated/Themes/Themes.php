@@ -1,6 +1,7 @@
 <?php
 namespace Caffeinated\Themes;
 
+use Caffeinated\Themes\Exceptions\FileMissingException;
 use Illuminate\Config\Repository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
