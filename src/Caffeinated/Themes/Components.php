@@ -68,12 +68,8 @@ class Components
 	 */
 	protected function registerTag($method, $namespace = '')
 	{
-		$this->blade->extend(function($view, $compiler) use ($method, $namespace) {
-			$pattern = $compiler->createMatcher('component_'.$method);
-
-			$replace = '$1<?php echo '.$namespace.$method.'$2; ?>';
-
-			return preg_replace($pattern, $replace, $view);
+		$this->blade->directive('component_'.$method, function($view) use ($method,$namespace){
+			return '<?php echo '.$namespace.$method."$view; ?>";
 		});
 	}
 
