@@ -20,7 +20,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__.'/../../config/themes.php' => config_path('themes.php')
+			__DIR__.'/../config/themes.php' => config_path('themes.php')
 		]);
 	}
 
@@ -32,7 +32,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->mergeConfigFrom(
-		    __DIR__.'/../../config/themes.php', 'caffeinated.themes'
+		    __DIR__.'/../config/themes.php', 'caffeinated.themes'
 		);
 
 		$this->registerServices();
@@ -83,7 +83,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	protected function configureTwig()
 	{
 		$engine = $this->app['config']->get('themes.engine');
-		
+
 		if ($engine == 'twig') {
 			$this->app['config']->push('sapling.extensions', 'Caffeinated\Themes\Twig\Extensions\Component');
 			$this->app['config']->push('sapling.extensions', 'Caffeinated\Themes\Twig\Extensions\Themes');
