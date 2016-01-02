@@ -57,13 +57,13 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	protected function registerServices()
 	{
-		$this->app->bindShared('themes.components', function($app) {
+		$this->app->singleton('themes.components', function($app) {
 			$blade = $app['view']->getEngineResolver()->resolve('blade')->getCompiler();
 
 			return new Components($app, $blade);
 		});
 
-		$this->app->bindShared('themes', function($app) {
+		$this->app->singleton('themes', function($app) {
 			return new Themes($app['files'], $app['config'], $app['view']);
 		});
 
