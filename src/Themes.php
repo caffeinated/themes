@@ -375,10 +375,10 @@ class Themes
 			$asset = $segments[0];
 		}
 
-		return url().'/'.$this->config->get('themes.paths.base').'/'
+		return url($this->config->get('themes.paths.base').'/'
 			.($theme ?: $this->getActive()).'/'
 			.$this->config->get('themes.paths.assets').'/'
-			.$asset;
+			.$asset);
 	}
 
 	/**
