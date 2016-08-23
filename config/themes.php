@@ -1,7 +1,7 @@
 <?php
 
 return [
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	| Default Active Theme
@@ -14,21 +14,6 @@ return [
 	*/
 
 	'active' => 'bootstrap',
-	
-	/*
-	|--------------------------------------------------------------------------
-	| Templating Engine
-	|--------------------------------------------------------------------------
-	|
-	| Switch between using either Blade or Twig as youe templating engine. To
-	| use Twig, be sure to install the twigbridge package and register its
-	| service provider BEFORE the Caffeinated Themes service provider.
-	|
-	| Available Settings: "blade", "twig"
-	|
-	*/
-
-	'engine' => 'blade',
 
 	/*
 	|--------------------------------------------------------------------------

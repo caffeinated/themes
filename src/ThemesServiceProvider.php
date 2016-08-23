@@ -36,8 +36,6 @@ class ThemesServiceProvider extends ServiceProvider {
 		);
 
 		$this->registerServices();
-
-		$this->configureTwig();
 	}
 
 	/**
@@ -47,7 +45,7 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return ['themes', 'themes.components', 'themes.engine'];
+		return ['themes'];
 	}
 
 	/**
@@ -57,12 +55,6 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	protected function registerServices()
 	{
-		$this->app->singleton('themes.components', function($app) {
-			$blade = $app['view']->getEngineResolver()->resolve('blade')->getCompiler();
-
-			return new Components($app, $blade);
-		});
-
 		$this->app->singleton('themes', function($app) {
 			return new Themes($app['files'], $app['config'], $app['view']);
 		});
@@ -70,23 +62,5 @@ class ThemesServiceProvider extends ServiceProvider {
 		$this->app->booting(function($app) {
 			$app['themes']->register();
 		});
-	}
-
-	/**
-	 * Configure Twig
-	 *
-	 * Registers the necessary Caffeinated Themes extensions and facades
-	 * with Twig; only if Twig is set as the template engine.
-	 *
-	 * @return null
-	 */
-	protected function configureTwig()
-	{
-		$engine = $this->app['config']->get('themes.engine');
-
-		if ($engine == 'twig') {
-			$this->app['config']->push('sapling.extensions', 'Caffeinated\Themes\Twig\Extensions\Component');
-			$this->app['config']->push('sapling.extensions', 'Caffeinated\Themes\Twig\Extensions\Themes');
-		}
 	}
 }

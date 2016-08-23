@@ -1,13 +1,14 @@
 <?php
+
 namespace Caffeinated\Themes;
 
+use URL;
 use Caffeinated\Themes\Exceptions\FileMissingException;
 use Illuminate\Config\Repository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Response;
 use Illuminate\View\Factory as ViewFactory;
-use URL;
 
 class Themes
 {
@@ -15,11 +16,6 @@ class Themes
 	 * @var string
 	 */
 	protected $active;
-
-	/**
-	 * @var array
-	 */
-	protected $components;
 
 	/**
 	 * @var Repository
@@ -217,9 +213,6 @@ class Themes
 	 */
 	public function view($view, $data = array())
 	{
-		$this->autoloadComponents($this->getActive());
-		$this->addBonsai($this->getActive());
-
 		if (! is_null($this->layout)) {
 			$data['theme_layout'] = $this->getLayout();
 		}
@@ -404,65 +397,6 @@ class Themes
 			return $this->getActive()."::{$key}";
 		} else {
 			return $theme."::{$key}";
-		}
-	}
-
-	/**
-	 * Autoload a themes compontents file.
-	 *
-	 * @param  string $theme
-	 * @return null
-	 */
-	protected function autoloadComponents($theme)
-	{
-		$activeTheme        = $this->getActive();
-		$path               = $this->getPath();
-		$parent             = $this->getProperty($activeTheme.'::parent');
-		$themePath          = $path.'/'.$theme;
-		$componentsFilePath = $themePath.'/components.php';
-
-		if (! empty($parent)) {
-			$parentPath               = $path.'/'.$parent;
-			$parentComponentsFilePath = $parentPath.'/components.php';
-
-			if (file_exists($parentPath)) {
-				include ($parentComponentsFilePath);
-			}
-		}
-
-		if (file_exists($componentsFilePath)) {
-			include ($componentsFilePath);
-		}
-	}
-
-	/**
-	 * Add bonsai.json file is the Caffeinated Bonsai package
-	 * is present in the application.
-	 *
-	 * @param  string $theme
-	 * @return null
-	 */
-	protected function addBonsai($theme)
-	{
-		if (class_exists('Caffeinated\Bonsai\Bonsai')) {
-			$activeTheme = $this->getActive();
-			$path        = $this->getPath();
-			$parent      = $this->getProperty($activeTheme.'::parent');
-			$themePath   = $path.'/'.$theme;
-			$bonsaiPath  = $themePath.'/bonsai.json';
-
-			if (! empty($parent)) {
-				$parentPath       = $path.'/'.$parent;
-				$parentBonsaiPath = $parentPath.'/bonsai.json';
-
-				if (file_exists($parentBonsaiPath)) {
-					\Bonsai::add($parentBonsaiPath);
-				}
-			}
-
-			if (file_exists($bonsaiPath)) {
-				\Bonsai::add($bonsaiPath);
-			}
 		}
 	}
 
