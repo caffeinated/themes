@@ -12,10 +12,8 @@ The package follows the FIG standards PSR-1, PSR-2, and PSR-4 to ensure a high l
 Features
 --------
 - Supports Caffeinated Modules
-- Supports both the Blade and Twig templating engines
 - Intelligent fallback view support
 - Child/parent theme inheritance
-- Theme components, easily create re-usable UI components
 
 Documentation
 -------------
