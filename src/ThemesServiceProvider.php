@@ -1,10 +1,13 @@
 <?php
+
 namespace Caffeinated\Themes;
 
+use View;
+use Caffeinated\Manifest\Manifest;
 use Illuminate\Support\ServiceProvider;
 
-class ThemesServiceProvider extends ServiceProvider {
-
+class ThemesServiceProvider extends ServiceProvider
+{
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
@@ -36,6 +39,7 @@ class ThemesServiceProvider extends ServiceProvider {
 		);
 
 		$this->registerServices();
+        $this->registerNamespaces();
 	}
 
 	/**
@@ -45,22 +49,40 @@ class ThemesServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return ['themes'];
+		return ['caffeinated.themes', 'view.finder'];
 	}
 
 	/**
 	 * Register the package services.
-	 *
-	 * @return void
 	 */
 	protected function registerServices()
 	{
-		$this->app->singleton('themes', function($app) {
-			return new Themes($app['files'], $app['config'], $app['view']);
-		});
-
-		$this->app->booting(function($app) {
-			$app['themes']->register();
+        $this->app->singleton('view.finder', function($app) {
+            return new ThemeViewFinder($app['files'], $app['config']['view.paths'], null);
+        });
+        
+		$this->app->singleton('caffeinated.themes', function($app) {
+            $themes = $this->app['files']->directories(config('themes.paths.absolute'));
+            
+            foreach ($themes as $theme) {
+                $manifest = new Manifest($theme.'/theme.json');
+                
+                $items[] = $manifest;
+            }
+            
+			return new Theme($items);
 		});
 	}
+    
+    /**
+     * Register the theme namespaces.
+     */
+    protected function registerNamespaces()
+    {
+        $themes = app('caffeinated.themes')->all();
+        
+        foreach ($themes as $theme) {
+            app('view')->addNamespace($theme->get('slug'), app('caffeinated.themes')->getAbsolutePath($theme->get('slug')).'/views');
+        }
+    }
 }
