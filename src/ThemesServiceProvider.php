@@ -58,10 +58,6 @@ class ThemesServiceProvider extends ServiceProvider
 	 */
 	protected function registerServices()
 	{
-        $this->app->singleton('view.finder', function($app) {
-            return new ThemeViewFinder($app['files'], $app['config']['view.paths'], null);
-        });
-        
 		$this->app->singleton('caffeinated.themes', function($app) {
             $themes = $this->app['files']->directories(config('themes.paths.absolute'));
             
@@ -73,6 +69,10 @@ class ThemesServiceProvider extends ServiceProvider
             
 			return new Theme($items);
 		});
+        
+        $this->app->singleton('view.finder', function($app) {
+            return new ThemeViewFinder($app['files'], $app['config']['view.paths'], null);
+        });
 	}
     
     /**
