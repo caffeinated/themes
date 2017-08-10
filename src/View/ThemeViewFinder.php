@@ -1,6 +1,6 @@
 <?php
 
-namespace Caffeinated\Themes;
+namespace Caffeinated\Themes\View;
 
 use Illuminate\View\FileViewFinder;
 

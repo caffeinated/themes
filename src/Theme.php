@@ -3,9 +3,12 @@
 namespace Caffeinated\Themes;
 
 use Illuminate\Support\Collection;
+use Caffeinated\Themes\Traits\RegistersViewLocations;
 
 class Theme extends Collection
 {
+    use RegistersViewLocations;
+    
     /**
      * @var string
      */
@@ -35,17 +38,54 @@ class Theme extends Collection
     }
     
     /**
-     * Set or fetch the default layout.
+     * Get the absolute path of the given theme file.
      *
-     * @param  null|string  $layout
-     * @return string|void
+     * @param  string  $file
+     * @param  string  $theme
+     * @return string
      */
-    public function layout($layout = null)
+    public function absolutePath($file = '', $theme = null)
     {
-        if (is_null($layout)) {
-            return $this->layout;
+        if (is_null($theme)) {
+            $theme = $this->getCurrent();
         }
         
+        return config('themes.paths.absolute')."/$theme/$file";
+    }
+    
+    /**
+     * Get the relative path of the given theme file.
+     *
+     * @param  string  $file
+     * @param  string  $theme
+     * @return string
+     */
+    public function path($file = '', $theme = null)
+    {
+        if (is_null($theme)) {
+            $theme = $this->getCurrent();
+        }
+        
+        return config('themes.paths.base')."/$theme/$file";
+    }
+    
+    /**
+     * Get the layout property.
+     *
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+    
+    /**
+     * Set the layout property.
+     *
+     * @param  string  $layout
+     */
+    public function setLayout($layout)
+    {
         $this->layout = $layout;
     }
     
@@ -89,58 +129,5 @@ class Theme extends Collection
     public function getAbsolutePath($theme)
     {
         return config('themes.paths.absolute').'/'.$theme;
-    }
-    
-    /**
-     * Resolve and return the primary and parent themes.
-     *
-     * @param  string  $theme
-     * @return array
-     */
-    protected function resolveTheme($theme)
-    {
-        $theme  = $this->where('slug', $theme)->first();
-        $parent = null;
-        
-        if ($theme->has('parent')) {
-            $parent = $this->where('slug', $theme->get('parent'))->first();
-        }
-        
-        return [$theme, $parent];
-    }
-    
-    /**
-     * Remove the primary and parent theme from the view finder.
-     *
-     * @param  Manifest  $theme
-     */
-    protected function removeRegisteredLocation($theme)
-    {
-        $current         = $this->where('slug', $this->getCurrent())->first();
-        $currentLocation = config('themes.paths.absolute').'/'.$current->get('slug').'/views';
-        app('view.finder')->removeLocation($themeLocation);
-        
-        if ($current->has('parent')) {
-            $parent         = $this->where('slug', $current->get('parent'))->first();
-            $parentLocation = config('themes.paths.absolute').'/'.$current->get('slug').'/views';
-            app('view.finder')->removeLocation($parentLocation);
-        }
-    }
-    
-    /**
-     * Register the primary and parent theme with the view finder.
-     *
-     * @param  Manifest  $theme
-     * @param  Manifest  $parent
-     */
-    protected function addRegisteredLocation($theme, $parent)
-    {
-        if (! is_null($parent)) {
-            $parentLocation = config('themes.paths.absolute').'/'.$parent->get('slug').'/views';
-            app('view.finder')->prependLocation($parentLocation);
-        }
-        
-        $themeLocation = config('themes.paths.absolute').'/'.$theme->get('slug').'/views';
-        app('view.finder')->prependLocation($themeLocation);
     }
 }

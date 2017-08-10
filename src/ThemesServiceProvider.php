@@ -5,6 +5,7 @@ namespace Caffeinated\Themes;
 use View;
 use Caffeinated\Manifest\Manifest;
 use Illuminate\Support\ServiceProvider;
+use Caffeinated\Themes\View\ThemeViewFinder;
 
 class ThemesServiceProvider extends ServiceProvider
 {
