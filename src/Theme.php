@@ -8,17 +8,17 @@ use Caffeinated\Themes\Traits\RegistersViewLocations;
 class Theme extends Collection
 {
     use RegistersViewLocations;
-    
+
     /**
      * @var string
      */
     protected $current;
-    
+
     /**
      * @var string|null
      */
     protected $layout = null;
-    
+
     /**
      * Register and set the currently active theme.
      *
@@ -27,16 +27,16 @@ class Theme extends Collection
     public function set($theme)
     {
         list($theme, $parent) = $this->resolveTheme($theme);
-        
+
         if (! $this->isCurrent($theme->get('slug')) and (! is_null($this->getCurrent()))) {
             $this->removeRegisteredLocation($theme, $parent);
         }
-        
+
         $this->addRegisteredLocation($theme, $parent);
-        
+
         $this->setCurrent($theme->get('slug'));
     }
-    
+
     /**
      * Get the absolute path of the given theme file.
      *
@@ -49,10 +49,10 @@ class Theme extends Collection
         if (is_null($theme)) {
             $theme = $this->getCurrent();
         }
-        
+
         return config('themes.paths.absolute')."/$theme/$file";
     }
-    
+
     /**
      * Get the relative path of the given theme file.
      *
@@ -65,10 +65,10 @@ class Theme extends Collection
         if (is_null($theme)) {
             $theme = $this->getCurrent();
         }
-        
+
         return config('themes.paths.base')."/$theme/$file";
     }
-    
+
     /**
      * Get the layout property.
      *
@@ -78,7 +78,7 @@ class Theme extends Collection
     {
         return $this->layout;
     }
-    
+
     /**
      * Set the layout property.
      *
@@ -88,7 +88,7 @@ class Theme extends Collection
     {
         $this->layout = $layout;
     }
-    
+
     /**
      * Set the current theme property.
      *
@@ -98,7 +98,7 @@ class Theme extends Collection
     {
         $this->current = $theme;
     }
-    
+
     /**
      * Get the current theme property.
      *
@@ -108,7 +108,7 @@ class Theme extends Collection
     {
         return $this->current;
     }
-    
+
     /**
      * Determine if the given theme is the currently set theme.
      *
@@ -119,7 +119,7 @@ class Theme extends Collection
     {
         return $this->current === $theme;
     }
-    
+
     /**
      * Get the absolute path of the given theme.
      *
@@ -129,5 +129,16 @@ class Theme extends Collection
     public function getAbsolutePath($theme)
     {
         return config('themes.paths.absolute').'/'.$theme;
+    }
+
+    /**
+     * Get the qualified name for a given view, e.g getQualifiedViewName('test') = 'currentTheme::test'.
+     *
+     * @param  string  $unqualifiedViewName
+     * @return string
+     */
+    public function getQualifiedViewName($unqualifiedViewName)
+    {
+        return "{$this->current}::{$unqualifiedViewName}";
     }
 }
