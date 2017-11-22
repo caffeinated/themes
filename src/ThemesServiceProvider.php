@@ -59,29 +59,35 @@ class ThemesServiceProvider extends ServiceProvider
 	protected function registerServices()
 	{
 		$this->app->singleton('caffeinated.themes', function($app) {
-            $themes = $this->app['files']->directories(config('themes.paths.absolute'));
-            
+            $themes = [];
+            $items  = [];
+
+            if ($path = config('themes.paths.absolute')) {
+                if (file_exists($path) && is_dir($path)) {
+                    $themes = $this->app['files']->directories($path);
+                }
+            }
+
             foreach ($themes as $theme) {
                 $manifest = new Manifest($theme.'/theme.json');
-                
                 $items[] = $manifest;
             }
-            
-			return new Theme($items);
+
+            return new Theme($items);
 		});
-        
+
         $this->app->singleton('view.finder', function($app) {
             return new ThemeViewFinder($app['files'], $app['config']['view.paths'], null);
         });
 	}
-    
+
     /**
      * Register the theme namespaces.
      */
     protected function registerNamespaces()
     {
         $themes = app('caffeinated.themes')->all();
-        
+
         foreach ($themes as $theme) {
             app('view')->addNamespace($theme->get('slug'), app('caffeinated.themes')->getAbsolutePath($theme->get('slug')).'/views');
         }
