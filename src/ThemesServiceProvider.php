@@ -2,6 +2,8 @@
 namespace Caffeinated\Themes;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use Caffeinated\Themes\Facades\Theme;
 
 class ThemesServiceProvider extends ServiceProvider {
 
@@ -22,7 +24,14 @@ class ThemesServiceProvider extends ServiceProvider {
 		$this->publishes([
 			__DIR__.'/../config/themes.php' => config_path('themes.php')
 		]);
-	}
+
+        Blade::directive('includeFromTheme', function($view) {
+            $currentView =Theme::partialView($view);
+            return  "<?php echo \$__env->make( '$currentView', array_except(get_defined_vars(), array('__data', '__path')) )->render(); ?>";
+
+
+        });
+    }
 
 	/**
 	 * Register the service provider.
