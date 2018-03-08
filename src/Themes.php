@@ -193,20 +193,9 @@ class Themes
      */
     public function getView($view)
     {
-        $activeTheme = $this->getActive();
-        $parent      = $this->getProperty($activeTheme.'::parent');
+        $viewPosibleLocations = $this->getAllPosibleViews($view);
 
-        $views = [
-            'theme'  => $this->getThemeNamespace($view),
-            'parent' => $this->getThemeNamespace($view, $parent),
-            'module' => $this->getModuleView($view),
-            'thememodule' => $this->getThemeModuleNamespace($view),
-            'thememoduleparent' => $this->getThemeModuleNamespace($view, $parent),
-            'base'   => $view
-        ];
-
-
-        foreach ($views as $view) {
+        foreach ($viewPosibleLocations as $view) {
             if ($this->viewFactory->exists($view)) {
                 return $view;
             }
@@ -214,6 +203,7 @@ class Themes
 
         return false;
     }
+
 
     /**
      * Render theme view file.
@@ -224,7 +214,6 @@ class Themes
      */
     public function view($view, $data = array())
     {
-
         if (! is_null($this->layout)) {
             $data['theme_layout'] = $this->getLayout();
         }
@@ -235,35 +224,26 @@ class Themes
 
     public function partialView($view, $data = array())
     {
+        Log::debug("Themes:partialView : INIT", [$view]);
         $segments = explode('::', $view);
         $theme    = null;
+        $parentTheme=null;
+        $grandParentTheme=null;
 
         if (count($segments) == 2  ) {
-
             list($theme, $viewName) = $segments;
             if($theme=="Theme"){
-                $currentTheme=  $this->getActive();
-                $parentTheme= $this->getProperty($currentTheme.'::parent');
-                $themes=array();
-                array_push($themes,$currentTheme);
-                if($parentTheme!=null)
-                    array_push($themes,$parentTheme);
+                $viewPosibleLocations = $this->getAllPosibleViews($viewName);
 
-                $views = [
-                    'theme'  => $this->getThemeNamespace($viewName),
-                    'parent' => $this->getThemeNamespace($viewName, $parentTheme),
-                    'base'   => $viewName
-                ];
-
-
-                foreach ($views as $view) {
+                foreach ($viewPosibleLocations as $view) {
                     if ($this->viewFactory->exists($view)) {
+                        Log::debug("\tfoundView: ", [$view]);
                         return $view;
                     }
                 }
-                return false;            }
-        } else {
-            $asset = $segments[0];
+                Log::debug("\tfoundView: ", [false]);
+                return false;
+            }
         }
     }
 
@@ -506,5 +486,72 @@ class Themes
         }
 
         return null;
+    }
+
+    protected function getAllPosibleViews($view){
+        $themeView = null;
+        $parentThemeView= null;
+        $grandParentThemeView= null;
+
+        Log::debug("getView INIT",[$view]);
+        $activeTheme = $this->getActive();
+
+
+        //THEME VIEW
+        $themeView =  $this->getThemeNamespace($view);
+        Log::debug("\tTheme: $activeTheme");
+        Log::debug("\t\tThemeView: $themeView");
+
+
+        $parentTheme      = $this->getProperty($activeTheme.'::parent');
+        Log::debug("\tParentTheme: $parentTheme");
+
+
+        if($parentTheme != null){
+            $parentThemeView = $this->getThemeNamespace($view, $parentTheme);
+            Log::debug("\t\tParentThemeView: $parentThemeView");
+            $grandParentTheme=  $this->getProperty($parentTheme.'::parent');
+            if($grandParentTheme!=null) {
+                Log::debug("\tgrandParentTheme: $grandParentTheme");
+                $grandParentThemeView = $this->getThemeNamespace($view, $grandParentTheme);
+                Log::debug("\t\tgrandParentView: $grandParentThemeView");
+            }
+        }
+
+        $newViews= [];
+        if($themeView!=null){
+            $newViews['themeView'] =$themeView;
+        }
+        if($parentThemeView!=null){
+            Log::debug("\tParent Theme View: $parentThemeView");
+            $newViews['parentThemeView'] =$parentThemeView;
+        }
+        if($grandParentThemeView!=null){
+            Log::debug("\tGrandparent Theme View: $grandParentThemeView");
+            $newViews['grandParentThemeView'] =$grandParentThemeView;
+        }
+
+        $moduleView=  $this->getModuleView($view);
+        if($moduleView){
+            $newViews['moduleView'] =$moduleView;
+        }
+
+        $themeModuleView= $this->getThemeModuleNamespace($view);
+        if($themeModuleView){
+            $newViews['themeModuleView'] =$themeModuleView;
+
+        }
+
+        if($parentTheme){
+            $parentThemeModuleView= $this->getThemeModuleNamespace($view, $parentTheme);
+            if($parentThemeModuleView){
+                $newViews['parentThemeModuleView'] =$parentThemeModuleView;
+            }
+        }
+
+        $newViews['view'] = $view;
+
+        return $newViews;
+
     }
 }
