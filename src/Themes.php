@@ -396,10 +396,13 @@ class Themes
             if($theme=="Theme"){
                 $currentTheme=  $this->getActive();
                 $parentTheme= $this->getProperty($currentTheme.'::parent');
+                $grandParentTheme= $this->getProperty($parentTheme.'::parent');
                 $themes=array();
                 array_push($themes,$currentTheme);
                 if($parentTheme!=null)
                     array_push($themes,$parentTheme);
+                if($grandParentTheme!=null)
+                    array_push($themes,$grandParentTheme);
                 foreach($themes as $theme){
                     //Add a
                     $themeAssetURL = url($this->config->get('themes.paths.base').'/'.$theme .'/'.$this->config->get('themes.paths.assets').'/'.$asset);
