@@ -10,6 +10,8 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Response;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
+
 
 class Themes
 {
@@ -384,54 +386,69 @@ class Themes
      *
      * @return string
      */
-    public function asset($asset)
+    public function asset($asset, $version = null, $buildPath = 'build')
     {
         $segments = explode('::', $asset);
-        $theme    = null;
+        $source    = null;
+
+        if(!isset($version)) {
+            $version = Config::get('basebone.general.enable_version_system');
+        }
 
         //This function allows the search of assets in the current theme and it parent (if exists)
         //TODO: Added recursive call to get all ancestors of a theme
         if (count($segments) == 2  ) {
-            list($theme, $asset) = $segments;
-            if($theme=="Theme"){
-                $currentTheme=  $this->getActive();
-                $parentTheme= $this->getProperty($currentTheme.'::parent');
-                $grandParentTheme= $this->getProperty($parentTheme.'::parent');
-                $themes=array();
-                array_push($themes,$currentTheme);
-                if($parentTheme!=null)
-                    array_push($themes,$parentTheme);
-                if($grandParentTheme!=null)
-                    array_push($themes,$grandParentTheme);
+            list($source, $asset) = $segments;
+            // If first asset source is Theme::, asset comes from the Themes module,
+            // In any other case, the asset comes from the module
+            // 3-level search is implemented and working.
+            if ($source == "Theme") {
+
+                $currentTheme =  $this->getActive();
+                $parentTheme = $this->getProperty($currentTheme.'::parent');
+                $grandParentTheme = $this->getProperty($parentTheme.'::parent');
+                $themes = array();
+
+                array_push($themes, $currentTheme);
+                isset($parentTheme) ? array_push($themes, $parentTheme) : null;
+                isset($grandParentTheme) ? array_push($themes, $grandParentTheme) : null;
+
                 foreach($themes as $theme){
-                    //Add a
-                    $themeAssetURL = url($this->config->get('themes.paths.base').'/'.$theme .'/'.$this->config->get('themes.paths.assets').'/'.$asset);
-                    $themeAssetPath= public_path().'/'.$this->config->get('themes.paths.base').'/'.$theme .'/'.$this->config->get('themes.paths.assets').'/'.$asset;
-                    $assetPossibleLocation[$theme]=[$themeAssetURL,$themeAssetPath];
+                    // Add a
+                    $themeAssetURL = $this->config->get('themes.paths.base').'/'.$theme .'/'.
+                                        $this->config->get('themes.paths.assets').'/'.$asset;
+                    $themeAssetPath = public_path().'/'.$themeAssetURL;
+                    $assetPossibleLocation[$theme] = [$themeAssetURL, $themeAssetPath];
                 }
 
                 foreach($assetPossibleLocation as $location){
                     if(file_exists($location[1])) {
-                        #dd($location[0]);
-                        return $location[0];
+                        $themeAssetURL = $location[0];
+                        break;
                     }
                 }
+
+            } else {
+                // TODO: IMPLEMENT SEARCH FOR MODULE ASSETS GIVING PRIORITY TO ASSETS FROM THEMES MODULE
+                $themeAssetURL = $asset;
             }
         } else {
-            $asset = $segments[0];
+            $themeAssetURL = $segments[0];
         }
 
-
-        if (count($segments) == 2) {
-            list($theme, $asset) = $segments;
+        // If versioning is active, use the processed asset route as a parameter to elixir, which will return
+        // the versioned file route from the assets manifest on /public/build/rev-manifest.json
+        // If versioning is not active, encapsulate URL using url() in order to get the absolute URL instead
+        // of relative to the view requesting the asset
+        if($version) {
+            $themeAssetURL = elixir($themeAssetURL, $buildPath);
         } else {
-            $asset = $segments[0];
+            $themeAssetURL = url($themeAssetURL);
         }
 
-        return url($this->config->get('themes.paths.base').'/'
-            .($theme ?: $this->getActive()).'/'
-            .$this->config->get('themes.paths.assets').'/'
-            .$asset);
+
+        return $themeAssetURL;
+
     }
 
     /**
@@ -557,4 +574,5 @@ class Themes
         return $newViews;
 
     }
+
 }
