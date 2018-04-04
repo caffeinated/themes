@@ -392,7 +392,12 @@ class Themes
         $source    = null;
 
         if(!isset($version)) {
-            $version = Config::get('basebone.general.enable_version_system');
+            $config = Config::get('basebone.general');
+            if(array_key_exists('enable_version_system', $config)) {
+                $version = $config['enable_version_system'];
+            } else {
+                $version = false;
+            }
         }
 
         //This function allows the search of assets in the current theme and it parent (if exists)
@@ -430,7 +435,7 @@ class Themes
 
             } else {
                 // TODO: IMPLEMENT SEARCH FOR MODULE ASSETS GIVING PRIORITY TO ASSETS FROM THEMES MODULE
-                $themeAssetURL = $asset;
+                $themeAssetURL = 'assets/'.$source.'/'.$asset;
             }
         } else {
             $themeAssetURL = $segments[0];
