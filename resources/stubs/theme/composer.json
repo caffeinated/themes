@@ -1,0 +1,7 @@
+{
+    "name": "DummyVendorName/DummyThemeName",
+    "description": "DummyThemeName",
+    "type": "library",
+    "minimum-stability": "dev",
+    "require": {}
+}

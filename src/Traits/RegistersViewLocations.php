@@ -14,14 +14,14 @@ trait RegistersViewLocations
     {
         $theme  = $this->where('slug', $theme)->first();
         $parent = null;
-        
+
         if ($theme->has('parent')) {
             $parent = $this->where('slug', $theme->get('parent'))->first();
         }
-        
+
         return [$theme, $parent];
     }
-    
+
     /**
      * Remove the primary and parent theme from the view finder.
      *
@@ -31,15 +31,15 @@ trait RegistersViewLocations
     {
         $current         = $this->where('slug', $this->getCurrent())->first();
         $currentLocation = config('themes.paths.absolute').'/'.$current->get('slug').'/views';
-        app('view.finder')->removeLocation($themeLocation);
-        
+        app('view.finder')->removeLocation($currentLocation);
+
         if ($current->has('parent')) {
             $parent         = $this->where('slug', $current->get('parent'))->first();
             $parentLocation = config('themes.paths.absolute').'/'.$current->get('slug').'/views';
             app('view.finder')->removeLocation($parentLocation);
         }
     }
-    
+
     /**
      * Register the primary and parent theme with the view finder.
      *
@@ -52,7 +52,7 @@ trait RegistersViewLocations
             $parentLocation = config('themes.paths.absolute').'/'.$parent->get('slug').'/views';
             app('view.finder')->prependLocation($parentLocation);
         }
-        
+
         $themeLocation = config('themes.paths.absolute').'/'.$theme->get('slug').'/views';
         app('view.finder')->prependLocation($themeLocation);
     }

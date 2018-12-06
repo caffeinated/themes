@@ -89,7 +89,10 @@ class ThemesServiceProvider extends ServiceProvider
         $themes = app('caffeinated.themes')->all();
 
         foreach ($themes as $theme) {
-            app('view')->addNamespace($theme->get('slug'), app('caffeinated.themes')->getAbsolutePath($theme->get('slug')).'/views');
+            $namespace = $theme->get('slug');
+            $hint = app('caffeinated.themes')->getAbsolutePath($namespace) . '/views';
+
+            app('view')->addNamespace($namespace, $hint);
         }
     }
 }
