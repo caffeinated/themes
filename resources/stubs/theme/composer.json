@@ -1,6 +1,6 @@
 {
-    "name": "DummyVendorName/DummyThemeName",
-    "description": "DummyThemeName",
+    "name": "DummyPackageName",
+    "description": "DummyDescription",
     "type": "library",
     "minimum-stability": "dev",
     "require": {}

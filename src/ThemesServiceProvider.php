@@ -2,6 +2,7 @@
 
 namespace Caffeinated\Themes;
 
+use Caffeinated\Themes\Console\GenerateTheme;
 use View;
 use Caffeinated\Manifest\Manifest;
 use Illuminate\Support\ServiceProvider;
@@ -41,6 +42,10 @@ class ThemesServiceProvider extends ServiceProvider
 
 		$this->registerServices();
         $this->registerNamespaces();
+
+        $this->commands([
+            GenerateTheme::class
+        ]);
 	}
 
 	/**
