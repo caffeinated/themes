@@ -52,7 +52,7 @@ class GenerateTheme extends Command
             File::makeDirectory($destination);
         }
 
-        $this->comment('Generating theme...');
+        $this->info('Generating theme...');
 
         foreach (File::allFiles($stubsPath) as $file) {
             $contents = $this->replacePlaceholders($file->getContents(), $options);
@@ -67,11 +67,11 @@ class GenerateTheme extends Command
             File::put($filePath, $contents);
         }
 
-        $this->addToolRepositoryToRootComposer(config('themes.paths.absolute') . '/' . $name);
-        $this->addToolPackageToRootComposer($options['package_name']);
-        $this->runCommand('composer update', getcwd());
+        $this->addThemeRepositoryToComposer(config('themes.paths.absolute') . '/' . $name);
+        $this->addThemePackageToComposer($options['package_name']);
 
-        $this->comment("Theme generated at [$destination].");
+        $this->info("Theme generated at [$destination].");
+        $this->info("If there are required dependencies, please run <fg=cyan;>composer update</>.");
     }
 
     /**
@@ -124,61 +124,53 @@ class GenerateTheme extends Command
     }
 
     /**
-     * Add a path repository for the tool to the application's composer.json file.
+     * Add package to composer
      *
      * @param $relativeThemePath
-     * @return void
      */
-    protected function addToolRepositoryToRootComposer($relativeThemePath)
+    protected function addThemeRepositoryToComposer($relativeThemePath)
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
-
+        $composer = $this->getComposerContents();
         $composer['repositories'][] = [
             'type' => 'path',
             'url' => $relativeThemePath,
         ];
 
-        file_put_contents(
-            base_path('composer.json'),
-            json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-        );
+        $this->writeToComposer($composer);
     }
 
     /**
-     * Add a package entry for the tool to the application's composer.json file.
+     * Add package as a required dependency to composer.
      *
      * @param $packageName
-     * @return void
      */
-    protected function addToolPackageToRootComposer($packageName)
+    protected function addThemePackageToComposer($packageName)
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        $composer = $this->getComposerContents();
 
         $composer['require'][$packageName] = '*';
 
-        file_put_contents(
-            base_path('composer.json'),
-            json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-        );
+        $this->writeToComposer($composer);
     }
 
     /**
-     * Run the given command as a process.
-     *
-     * @param  string  $command
-     * @param  string  $path
-     * @return void
+     * @return array
      */
-    protected function runCommand($command, $path)
+    protected function getComposerContents()
     {
-        $process = (new Process($command, $path))->setTimeout(null);
+        return json_decode(file_get_contents(base_path('composer.json')), true);
+    }
 
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
-            $process->setTty(true);
-        }
+    /**
+     * Write to composer
+     *
+     * @param $composer
+     * @return bool|int
+     */
+    protected function writeToComposer($composer)
+    {
+        $flags = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
 
-        $process->run(function ($type, $line) {
-            $this->output->write($line);
-        });
+        return file_put_contents(base_path('composer.json'), json_encode($composer, $flags));
     }
 }
