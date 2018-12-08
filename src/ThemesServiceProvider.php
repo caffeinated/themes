@@ -36,7 +36,7 @@ class ThemesServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->mergeConfigFrom(
+        $this->mergeConfigFrom(
 		    __DIR__.'/../config/themes.php', 'caffeinated.themes'
 		);
 
@@ -72,7 +72,6 @@ class ThemesServiceProvider extends ServiceProvider
                     $themes = $this->app['files']->directories($path);
                 }
             }
-
             foreach ($themes as $theme) {
                 $manifest = new Manifest($theme.'/theme.json');
                 $items[] = $manifest;

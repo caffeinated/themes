@@ -27,7 +27,7 @@ trait RegistersViewLocations
      *
      * @param  Manifest  $theme
      */
-    protected function removeRegisteredLocation($theme)
+    protected function removeRegisteredLocation()
     {
         $current         = $this->where('slug', $this->getCurrent())->first();
         $currentLocation = config('themes.paths.absolute').'/'.$current->get('slug').'/views';

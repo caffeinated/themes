@@ -2,8 +2,9 @@
 
 namespace Caffeinated\Themes\Console;
 
-use File;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Process;
 
 class GenerateTheme extends Command
 {
@@ -40,8 +41,10 @@ class GenerateTheme extends Command
     {
         $options = $this->getOptions();
         $destination = config('themes.paths.absolute');
+        $stubsPath = __DIR__ . '/../../resources/stubs/theme';
+        $name = ucfirst(camel_case($options['slug']));
 
-        if (File::isDirectory($destination.'/'.ucfirst(camel_case($options['slug'])))) {
+        if (File::isDirectory($destination.'/'. $name)) {
             return $this->error('Theme already exists!');
         }
 
@@ -49,11 +52,9 @@ class GenerateTheme extends Command
             File::makeDirectory($destination);
         }
 
-        $sourceFiles = File::allFiles(__DIR__.'/../../resources/stubs/theme');
-
         $this->comment('Generating theme...');
 
-        foreach ($sourceFiles as $file) {
+        foreach (File::allFiles($stubsPath) as $file) {
             $contents = $this->replacePlaceholders($file->getContents(), $options);
             $subPath = $file->getRelativePathname();
             $filePath = $destination . '/' . $options['name'] . '/' . $subPath;
@@ -65,6 +66,10 @@ class GenerateTheme extends Command
 
             File::put($filePath, $contents);
         }
+
+        $this->addToolRepositoryToRootComposer(config('themes.paths.absolute') . '/' . $name);
+        $this->addToolPackageToRootComposer($options['package_name']);
+        $this->runCommand('composer update', getcwd());
 
         $this->comment("Theme generated at [$destination].");
     }
@@ -88,6 +93,13 @@ class GenerateTheme extends Command
         ];
     }
 
+    /**
+     * Replace placeholders with actual content.
+     *
+     * @param $contents
+     * @param $options
+     * @return mixed
+     */
     protected function replacePlaceholders($contents, $options)
     {
         $find = [
@@ -114,15 +126,16 @@ class GenerateTheme extends Command
     /**
      * Add a path repository for the tool to the application's composer.json file.
      *
+     * @param $relativeThemePath
      * @return void
      */
-    protected function addToolRepositoryToRootComposer()
+    protected function addToolRepositoryToRootComposer($relativeThemePath)
     {
         $composer = json_decode(file_get_contents(base_path('composer.json')), true);
 
         $composer['repositories'][] = [
             'type' => 'path',
-            'url' => './'.$this->relativeToolPath(),
+            'url' => $relativeThemePath,
         ];
 
         file_put_contents(
@@ -134,17 +147,38 @@ class GenerateTheme extends Command
     /**
      * Add a package entry for the tool to the application's composer.json file.
      *
+     * @param $packageName
      * @return void
      */
-    protected function addToolPackageToRootComposer()
+    protected function addToolPackageToRootComposer($packageName)
     {
         $composer = json_decode(file_get_contents(base_path('composer.json')), true);
 
-        $composer['require'][$this->argument('name')] = '*';
+        $composer['require'][$packageName] = '*';
 
         file_put_contents(
             base_path('composer.json'),
             json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );
+    }
+
+    /**
+     * Run the given command as a process.
+     *
+     * @param  string  $command
+     * @param  string  $path
+     * @return void
+     */
+    protected function runCommand($command, $path)
+    {
+        $process = (new Process($command, $path))->setTimeout(null);
+
+        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+            $process->setTty(true);
+        }
+
+        $process->run(function ($type, $line) {
+            $this->output->write($line);
+        });
     }
 }

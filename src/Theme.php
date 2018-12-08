@@ -8,17 +8,28 @@ use Caffeinated\Themes\Traits\RegistersViewLocations;
 class Theme extends Collection
 {
     use RegistersViewLocations;
-    
+
     /**
      * @var string
      */
     protected $current;
-    
+
     /**
      * @var string|null
      */
     protected $layout = null;
-    
+
+    /**
+     * Create a new collection.
+     *
+     * @param  mixed  $items
+     * @return void
+     */
+    public function __construct($items = [])
+    {
+        parent::__construct($items);
+    }
+
     /**
      * Register and set the currently active theme.
      *
@@ -27,16 +38,16 @@ class Theme extends Collection
     public function set($theme)
     {
         list($theme, $parent) = $this->resolveTheme($theme);
-        
+
         if (! $this->isCurrent($theme->get('slug')) and (! is_null($this->getCurrent()))) {
-            $this->removeRegisteredLocation($theme, $parent);
+            $this->removeRegisteredLocation();
         }
-        
+
         $this->addRegisteredLocation($theme, $parent);
-        
+
         $this->setCurrent($theme->get('slug'));
     }
-    
+
     /**
      * Get the absolute path of the given theme file.
      *
@@ -49,10 +60,10 @@ class Theme extends Collection
         if (is_null($theme)) {
             $theme = $this->getCurrent();
         }
-        
+
         return config('themes.paths.absolute')."/$theme/$file";
     }
-    
+
     /**
      * Get the relative path of the given theme file.
      *
@@ -65,10 +76,10 @@ class Theme extends Collection
         if (is_null($theme)) {
             $theme = $this->getCurrent();
         }
-        
+
         return config('themes.paths.base')."/$theme/$file";
     }
-    
+
     /**
      * Get the layout property.
      *
@@ -78,7 +89,7 @@ class Theme extends Collection
     {
         return $this->layout;
     }
-    
+
     /**
      * Set the layout property.
      *
@@ -88,7 +99,7 @@ class Theme extends Collection
     {
         $this->layout = $layout;
     }
-    
+
     /**
      * Set the current theme property.
      *
@@ -98,7 +109,7 @@ class Theme extends Collection
     {
         $this->current = $theme;
     }
-    
+
     /**
      * Get the current theme property.
      *
@@ -108,7 +119,7 @@ class Theme extends Collection
     {
         return $this->current;
     }
-    
+
     /**
      * Determine if the given theme is the currently set theme.
      *
@@ -119,7 +130,7 @@ class Theme extends Collection
     {
         return $this->current === $theme;
     }
-    
+
     /**
      * Get the absolute path of the given theme.
      *
