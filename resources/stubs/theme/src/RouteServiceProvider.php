@@ -1,10 +1,10 @@
 <?php
 
-namespace DummyNamespace\Providers;
+namespace DummyNamespace;
 
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as BaseRouteServiceProvider;
+use Caffeinated\Themes\Providers\BaseThemeRoutesServiceProvider;
 
-class RouteServiceProvider extends BaseRouteServiceProvider
+class RouteServiceProvider extends BaseThemeRoutesServiceProvider
 {
     /**
      * This namespace is applied to your controller routes.

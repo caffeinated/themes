@@ -108,6 +108,11 @@ class Theme extends Collection
     public function setCurrent($theme)
     {
         $this->current = $theme;
+
+        $theme = ucfirst($theme);
+        $base = ucfirst(str_replace('/', '\\\\', config('themes.paths.base')));
+
+        app()->register("$base\\$theme\\ThemeServiceProvider");
     }
 
     /**
