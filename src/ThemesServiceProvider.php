@@ -82,7 +82,7 @@ class ThemesServiceProvider extends ServiceProvider
 
         $this->app->singleton('view.finder', function($app) {
             return new ThemeViewFinder($app['files'], $app['config']['view.paths'], null);
-        });
+		});
 	}
 
     /**
