@@ -1,0 +1,12 @@
+{
+    "name": "DummyPackageName",
+    "description": "DummyDescription",
+    "type": "library",
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "DummyEscapedNamespace\\": "src/"
+        }
+    },
+    "require": {}
+}

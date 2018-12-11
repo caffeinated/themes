@@ -2,6 +2,7 @@
 
 namespace Caffeinated\Themes;
 
+use Caffeinated\Themes\Console\GenerateTheme;
 use View;
 use Caffeinated\Manifest\Manifest;
 use Illuminate\Support\ServiceProvider;
@@ -35,12 +36,16 @@ class ThemesServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->mergeConfigFrom(
+        $this->mergeConfigFrom(
 		    __DIR__.'/../config/themes.php', 'caffeinated.themes'
 		);
 
 		$this->registerServices();
         $this->registerNamespaces();
+
+        $this->commands([
+            GenerateTheme::class
+        ]);
 	}
 
 	/**
@@ -67,7 +72,6 @@ class ThemesServiceProvider extends ServiceProvider
                     $themes = $this->app['files']->directories($path);
                 }
             }
-
             foreach ($themes as $theme) {
                 $manifest = new Manifest($theme.'/theme.json');
                 $items[] = $manifest;
@@ -89,7 +93,10 @@ class ThemesServiceProvider extends ServiceProvider
         $themes = app('caffeinated.themes')->all();
 
         foreach ($themes as $theme) {
-            app('view')->addNamespace($theme->get('slug'), app('caffeinated.themes')->getAbsolutePath($theme->get('slug')).'/views');
+            $namespace = $theme->get('slug');
+            $hint = app('caffeinated.themes')->getAbsolutePath($namespace) . '/views';
+
+            app('view')->addNamespace($namespace, $hint);
         }
     }
 }
