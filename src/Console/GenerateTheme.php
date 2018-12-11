@@ -4,7 +4,6 @@ namespace Caffeinated\Themes\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Symfony\Component\Process\Process;
 
 class GenerateTheme extends Command
 {
@@ -42,9 +41,10 @@ class GenerateTheme extends Command
         $options = $this->getOptions();
         $destination = config('themes.paths.absolute');
         $stubsPath = __DIR__ . '/../../resources/stubs/theme';
-        $name = ucfirst(camel_case($options['slug']));
+        $slug = $options['slug'];
+        $name = ucfirst(camel_case($slug));
 
-        if (File::isDirectory($destination.'/'. $name)) {
+        if (File::isDirectory($destination . '/' . $name)) {
             return $this->error('Theme already exists!');
         }
 
@@ -70,6 +70,8 @@ class GenerateTheme extends Command
         $this->addThemeRepositoryToComposer(config('themes.paths.absolute') . '/' . $name);
         $this->addThemePackageToComposer($options['package_name']);
 
+        symlink("../../themes/$slug/dist", public_path("theme-assets/$slug"));
+
         $this->info("Theme generated at [$destination].");
         $this->info("If there are required dependencies, please run <fg=cyan;>composer update</>.");
     }
@@ -86,6 +88,7 @@ class GenerateTheme extends Command
         return [
             'slug' => $slug,
             'namespace' => "Themes\\$name",
+            'escaped_namespace' => "Themes\\\\$name", // for composer.json psr-4
             'name' => $quick ? $name : $this->ask('What is your theme\'s name?', $name),
             'version' => $quick ? '1.0.0' : $this->ask('What is the version of your theme?', '1.0.0'),
             'description' => $quick ? "$name theme." : $this->ask('Can you describe your theme?', "$name theme."),
@@ -104,6 +107,7 @@ class GenerateTheme extends Command
     {
         $find = [
             'DummyNamespace',
+            'DummyEscapedNamespace',
             'DummyName',
             'DummySlug',
             'DummyVersion',
@@ -113,6 +117,7 @@ class GenerateTheme extends Command
 
         $replace = [
             $options['namespace'],
+            $options['escaped_namespace'],
             $options['name'],
             $options['slug'],
             $options['version'],

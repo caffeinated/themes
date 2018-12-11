@@ -15,6 +15,6 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
 
     public function register()
     {
-        $this->register(RouteServiceProvider::class);
+        $this->app->register(RouteServiceProvider::class);
     }
 }

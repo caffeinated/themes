@@ -8,13 +8,13 @@
 
         <title>DummyName</title>
 
-        <link rel="stylesheet" href="{{ mix(config('themes.paths.absolute').'/css/theme.css') }}">
+        <link rel="stylesheet" href="{{ theme_mix('/css/theme.css') }}">
     </head>
     <body>
         <div id="app">
             @yield('content')
         </div>
 
-        <script src="{{ mix(config('themes.paths.absolute').'/js/theme.js') }}"></script>
+        <script src="{{ theme_mix('/js/theme.js') }}"></script>
     </body>
 </html>

@@ -3,6 +3,7 @@
 namespace DummyNamespace;
 
 use Caffeinated\Themes\Providers\BaseThemeRoutesServiceProvider;
+use Route;
 
 class RouteServiceProvider extends BaseThemeRoutesServiceProvider
 {
