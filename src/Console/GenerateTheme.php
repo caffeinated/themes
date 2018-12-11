@@ -67,13 +67,9 @@ class GenerateTheme extends Command
             File::put($filePath, $contents);
         }
 
-        $this->addThemeRepositoryToComposer(config('themes.paths.absolute') . '/' . $name);
-        $this->addThemePackageToComposer($options['package_name']);
-
         symlink("../../themes/$slug/dist", public_path("theme-assets/$slug"));
 
         $this->info("Theme generated at [$destination].");
-        $this->info("If there are required dependencies, please run <fg=cyan;>composer update</>.");
     }
 
     /**
@@ -126,56 +122,5 @@ class GenerateTheme extends Command
         ];
 
         return str_replace($find, $replace, $contents);
-    }
-
-    /**
-     * Add package to composer
-     *
-     * @param $relativeThemePath
-     */
-    protected function addThemeRepositoryToComposer($relativeThemePath)
-    {
-        $composer = $this->getComposerContents();
-        $composer['repositories'][] = [
-            'type' => 'path',
-            'url' => $relativeThemePath,
-        ];
-
-        $this->writeToComposer($composer);
-    }
-
-    /**
-     * Add package as a required dependency to composer.
-     *
-     * @param $packageName
-     */
-    protected function addThemePackageToComposer($packageName)
-    {
-        $composer = $this->getComposerContents();
-
-        $composer['require'][$packageName] = '*';
-
-        $this->writeToComposer($composer);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getComposerContents()
-    {
-        return json_decode(file_get_contents(base_path('composer.json')), true);
-    }
-
-    /**
-     * Write to composer
-     *
-     * @param $composer
-     * @return bool|int
-     */
-    protected function writeToComposer($composer)
-    {
-        $flags = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES;
-
-        return file_put_contents(base_path('composer.json'), json_encode($composer, $flags));
     }
 }
