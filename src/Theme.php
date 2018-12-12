@@ -3,7 +3,7 @@
 namespace Caffeinated\Themes;
 
 use Illuminate\Support\Collection;
-use Caffeinated\Themes\Traits\RegistersViewLocations;
+use Caffeinated\Themes\Concerns\RegistersViewLocations;
 
 class Theme extends Collection
 {
@@ -49,22 +49,6 @@ class Theme extends Collection
     }
 
     /**
-     * Get the absolute path of the given theme file.
-     *
-     * @param  string  $file
-     * @param  string  $theme
-     * @return string
-     */
-    public function absolutePath($file = '', $theme = null)
-    {
-        if (is_null($theme)) {
-            $theme = $this->getCurrent();
-        }
-
-        return config('themes.paths.absolute')."/$theme/$file";
-    }
-
-    /**
      * Get the relative path of the given theme file.
      *
      * @param  string  $file
@@ -77,7 +61,9 @@ class Theme extends Collection
             $theme = $this->getCurrent();
         }
 
-        return config('themes.paths.base')."/$theme/$file";
+        $theme = $this->format($theme);
+
+        return config('themes.path')."/$theme/$file";
     }
 
     /**
@@ -108,11 +94,20 @@ class Theme extends Collection
     public function setCurrent($theme)
     {
         $this->current = $theme;
-
+        
         $theme = ucfirst($theme);
-        $base = ucfirst(str_replace('/', '\\\\', config('themes.paths.base')));
 
-        app()->register("$base\\$theme\\ThemeServiceProvider");
+        if (! file_exists(public_path('themes/'.$this->current))) {
+            if (! file_exists(public_path('themes'))) {
+                app()->make('files')->makeDirectory(public_path('themes'));
+            }
+
+            app()->make('files')->link(
+                $this->path('public'), public_path('themes/'.$this->current)
+            );
+        }
+
+        app()->register("Themes\\$theme\\Providers\\ThemeServiceProvider");
     }
 
     /**
@@ -137,13 +132,13 @@ class Theme extends Collection
     }
 
     /**
-     * Get the absolute path of the given theme.
-     *
-     * @param  string  $theme
+     * Format the given name as the directory basename.
+     * 
+     * @param  string  $name
      * @return string
      */
-    public function getAbsolutePath($theme)
+    private function format($name)
     {
-        return config('themes.paths.absolute').'/'.$theme;
+        return ucfirst(camel_case($name));
     }
 }

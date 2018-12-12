@@ -2,11 +2,11 @@
 
 namespace Caffeinated\Themes;
 
-use Caffeinated\Themes\Console\GenerateTheme;
 use View;
 use Caffeinated\Manifest\Manifest;
 use Illuminate\Support\ServiceProvider;
 use Caffeinated\Themes\View\ThemeViewFinder;
+use Caffeinated\Themes\Console\GenerateTheme;
 
 class ThemesServiceProvider extends ServiceProvider
 {
@@ -25,8 +25,8 @@ class ThemesServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__.'/../config/themes.php' => config_path('themes.php')
-		]);
+			__DIR__.'/../config/themes.php' => config_path('themes.php'),
+		], 'config');
 	}
 
 	/**
@@ -37,7 +37,7 @@ class ThemesServiceProvider extends ServiceProvider
 	public function register()
 	{
         $this->mergeConfigFrom(
-		    __DIR__.'/../config/themes.php', 'caffeinated.themes'
+		    __DIR__.'/../config/themes.php', 'themes'
 		);
 
 		$this->registerServices();
@@ -67,14 +67,15 @@ class ThemesServiceProvider extends ServiceProvider
             $themes = [];
             $items  = [];
 
-            if ($path = config('themes.paths.absolute')) {
+            if ($path = config('themes.path')) {
                 if (file_exists($path) && is_dir($path)) {
                     $themes = $this->app['files']->directories($path);
                 }
-            }
+			}
+			
             foreach ($themes as $theme) {
                 $manifest = new Manifest($theme.'/theme.json');
-                $items[] = $manifest;
+                $items[]  = $manifest;
             }
 
             return new Theme($items);
@@ -94,7 +95,7 @@ class ThemesServiceProvider extends ServiceProvider
 
         foreach ($themes as $theme) {
             $namespace = $theme->get('slug');
-            $hint = app('caffeinated.themes')->getAbsolutePath($namespace) . '/views';
+			$hint      = app('caffeinated.themes')->path('resources/views', $theme->get('slug'));
 
             app('view')->addNamespace($namespace, $hint);
         }

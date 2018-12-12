@@ -2,6 +2,6 @@
     "name": "DummyName",
     "slug": "DummySlug",
     "description": "DummyDescription",
-    "author": "",
+    "author": "DummyAuthor",
     "version": "DummyVersion"
 }

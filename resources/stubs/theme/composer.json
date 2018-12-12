@@ -1,8 +1,7 @@
 {
     "name": "DummyPackageName",
     "description": "DummyDescription",
-    "type": "library",
-    "minimum-stability": "dev",
+    "type": "caffeinated-theme",
     "autoload": {
         "psr-4": {
             "DummyEscapedNamespace\\": "src/"

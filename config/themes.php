@@ -4,6 +4,18 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
+	| Theme Path
+	|--------------------------------------------------------------------------
+	|
+	| Define the path where your themes will reside. By default we will assign
+	| themes to live at base of your Laravel application. Because themes
+	| can extend Laravel, this makes the most sense as the default.
+	*/
+
+	'path' => base_path('themes'),
+
+	/*
+	|--------------------------------------------------------------------------
 	| Default Active Theme
 	|--------------------------------------------------------------------------
 	|
@@ -17,52 +29,28 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Theme Paths
+	| Default Author
 	|--------------------------------------------------------------------------
+	|
+	| Define your default author name. This is used when generating themes.
+	| We will use this value in the generated theme manifest file so that
+	| you may reference the author of your themes in your application.
 	|
 	*/
 
-	'paths' => [
+	'author' => '',
 
-		/*
-		|----------------------------------------------------------------------
-		| Absolute Path
-		|----------------------------------------------------------------------
-		|
-		| Define the absolute path where you'd like to store your themes. Note
-		| that if you choose a path that's outside of your public directory, you
-		| will still need to store your assets within your public directory.
-		|
-		*/
-
-		'absolute' => public_path('themes'),
-
-		/*
-		|----------------------------------------------------------------------
-		| Base Path
-		|----------------------------------------------------------------------
-		|
-		| Define the base path where your themes will be publically available.
-		| This is used to generate the correct URL when utilizing both the
-		| asset() and secureAsset() methods.
-		|
-		*/
-
-		'base' => 'themes',
-
-		/*
-		|----------------------------------------------------------------------
-		| Assets Path
-		|----------------------------------------------------------------------
-		|
-		| Define the path that will store all assets for each of your themes.
-		| This is used to generate the correct URL when utilizing both the
-		| asset() and secureAsset() methods.
-		|
-		*/
-
-		'assets' => 'assets',
-
-	]
+	/*
+	|--------------------------------------------------------------------------
+	| Default Vendor
+	|--------------------------------------------------------------------------
+	|
+	| Define your default vendor name. This is used when generating themes.
+	| We will use this value in the generated composer file so that you
+	| may register your themes as a composer package as well.
+	|
+	*/
+	
+	'vendor' => 'vendor',
 
 ];

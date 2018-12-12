@@ -6,21 +6,7 @@ use Theme;
 use Illuminate\View\FileViewFinder;
 
 class ThemeViewFinder extends FileViewFinder
-{
-    /**
-     * Remove a location from the finder.
-     *
-     * @param  string  $location
-     */
-    public function removeLocation(string $location)
-    {
-        $key = array_search($location, $this->paths);
-        
-        if ($key) {
-            unset($this->paths[$key]);
-        }
-    }
-    
+{   
     /**
      * Get the path to a template with a named path.
      *
@@ -47,10 +33,10 @@ class ThemeViewFinder extends FileViewFinder
         $theme = Theme::getCurrent();
         
         $hints   = array_reverse($this->hints[$namespace]);
-        $hints[] = Theme::absolutePath('views/vendor/'.$namespace);
+        $hints[] = Theme::path('resources/views/vendor/'.$namespace);
         
-        if (class_exists(\Caffeinated\Modules\Modules::class)) {
-            $hints[] = Theme::absolutePath('views/modules/'.$namespace);
+        if (class_exists(\Caffeinated\Modules\ModulesServiceProvider::class)) {
+            $hints[] = Theme::path('resources/views/modules/'.$namespace);
         }
         
         $this->hints[$namespace] = array_reverse($hints);

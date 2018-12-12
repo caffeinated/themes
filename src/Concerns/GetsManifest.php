@@ -1,6 +1,6 @@
 <?php
 
-namespace Caffeinated\Themes\Traits;
+namespace Caffeinated\Themes\Concerns;
 
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
@@ -22,7 +22,7 @@ trait GetsManifest
 
     protected function getManifest()
     {
-        $moduleJsonPath = realpath($this->getDirectory() . '/../theme.json');
+        $moduleJsonPath = realpath($this->getDirectory() . '/../../theme.json');
 
         return json_decode(File::get($moduleJsonPath), true);
     }
