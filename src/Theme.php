@@ -55,7 +55,7 @@ class Theme extends Collection
 
         $theme = $this->format($theme);
 
-        return config('themes.path')."/$theme/$file";
+        return base_path("themes/{$theme}/{$file}");
     }
 
     /**

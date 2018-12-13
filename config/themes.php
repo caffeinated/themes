@@ -4,18 +4,6 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Theme Path
-	|--------------------------------------------------------------------------
-	|
-	| Define the path where your themes will reside. By default we will assign
-	| themes to live at base of your Laravel application. Because themes
-	| can extend Laravel, this makes the most sense as the default.
-	*/
-
-	'path' => base_path('themes'),
-
-	/*
-	|--------------------------------------------------------------------------
 	| Default Active Theme
 	|--------------------------------------------------------------------------
 	|

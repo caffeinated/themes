@@ -30,13 +30,13 @@ trait RegistersViewLocations
     protected function removeRegisteredLocation()
     {
         $current         = $this->where('slug', $this->getCurrent())->first();
-        $currentLocation = config('themes.path').'/'.$this->format($current->get('slug')).'/resources/views';
+        $currentLocation = $this->path('resources/views');
 
         app('view.finder')->removeLocation($currentLocation);
 
         if ($current->has('parent')) {
             $parent         = $this->where('slug', $current->get('parent'))->first();
-            $parentLocation = config('themes.path').'/'.$this->format($current->get('slug')).'/resources/views';
+            $parentLocation = $this->path('resources/views', $parent->slug);
             app('view.finder')->removeLocation($parentLocation);
         }
     }
@@ -50,11 +50,11 @@ trait RegistersViewLocations
     protected function addRegisteredLocation($theme, $parent)
     {
         if (! is_null($parent)) {
-            $parentLocation = config('themes.path').'/'.$this->format($parent->get('slug')).'/resources/views';
+            $parentLocation = $this->path('resources/views');
             app('view.finder')->prependLocation($parentLocation);
         }
 
-        $themeLocation = config('themes.path').'/'.$this->format($theme->get('slug')).'/resources/views';
+        $themeLocation = $this->path('resources/views');
         app('view.finder')->prependLocation($themeLocation);
     }
 

@@ -39,23 +39,23 @@ class GenerateTheme extends Command
     public function handle()
     {
         $options     = $this->getOptions();
-        $destination = config('themes.path');
+        $root = base_path('themes');
         $stubsPath   = __DIR__ . '/../../resources/stubs/theme';
         $slug        = $options['slug'];
         $name        = $this->format($slug);
 
-        if (File::isDirectory($destination . '/' . $name)) {
+        if (File::isDirectory($root . '/' . $name)) {
             return $this->error('Theme already exists!');
         }
 
-        if (! File::isDirectory($destination)) {
-            File::makeDirectory($destination);
+        if (! File::isDirectory($root)) {
+            File::makeDirectory($root);
         }
 
         foreach (File::allFiles($stubsPath) as $file) {
             $contents = $this->replacePlaceholders($file->getContents(), $options);
             $subPath  = $file->getRelativePathname();
-            $filePath = $destination . '/' . $options['name'] . '/' . $subPath;
+            $filePath = $root.'/'.$options['name'].'/'.$subPath;
             $dir      = dirname($filePath);
 
             if (! File::isDirectory($dir)) {
