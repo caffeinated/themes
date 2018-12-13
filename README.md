@@ -1,4 +1,4 @@
-# Caffeinated Theme
+# Caffeinated Themes
 [![Source](https://img.shields.io/badge/source-caffeinated/themes-blue.svg?style=flat-square)](https://github.com/caffeinated/themes)
 [![Latest Stable Version](https://poser.pugx.org/caffeinated/themes/v/stable?format=flat-square)](https://packagist.org/packages/caffeinated/themes)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
