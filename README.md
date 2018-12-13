@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 [![Total Downloads](https://img.shields.io/packagist/dt/caffeinated/themes.svg?style=flat-square)](https://packagist.org/packages/caffeinated/themes)
 
-Themes gives the means to group together a set of views and assets for Laravel 5.1 and 5.2. This gives an easy way to further decouple the way your web application looks from your code base.
+Themes gives the means to group together a set of views and assets for Laravel. This gives an easy way to further decouple the way your web application looks from your code base.
 
 ## Documentation
 You will find user friendly and updated documentation on the [Caffeinated website](https://caffeinatedpackages.com/guide/packages/themes.html).
