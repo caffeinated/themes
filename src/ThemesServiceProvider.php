@@ -39,9 +39,9 @@ class ThemesServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
 		    __DIR__.'/../config/themes.php', 'themes'
 		);
-
+		
 		$this->registerServices();
-        $this->registerNamespaces();
+		$this->registerNamespaces();
 
         $this->commands([
             GenerateTheme::class
@@ -99,5 +99,5 @@ class ThemesServiceProvider extends ServiceProvider
 
             app('view')->addNamespace($namespace, $hint);
         }
-    }
+	}
 }

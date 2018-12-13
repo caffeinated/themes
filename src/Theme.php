@@ -34,6 +34,7 @@ class Theme extends Collection
 
         $this->setCurrent($theme->get('slug'));
         
+        $this->registerAutoload($this->format($theme->get('slug')));
         $this->addRegisteredLocation($theme, $parent);
         $this->symlinkPublicDirectory();
         $this->registerServiceProvider($this->format($theme->get('slug')));
@@ -147,4 +148,22 @@ class Theme extends Collection
     {
         app()->register("Themes\\$theme\\Providers\\ThemeServiceProvider");
     }
+
+    /**
+     * Register the themes path as a PSR-4 reference.
+     * 
+     * @param  string  $theme
+     * @return void
+     */
+    protected function registerAutoload($theme)
+	{
+        $composer = require(base_path('vendor/autoload.php'));
+        
+        $class = 'Themes\\'.$theme.'\\';
+        $path  = $this->path('src/');
+
+        if (! array_key_exists($class, $composer->getClassMap())) {
+            $composer->addPsr4($class, $path);
+        }
+	}
 }

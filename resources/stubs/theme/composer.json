@@ -7,5 +7,7 @@
             "DummyEscapedNamespace\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "caffeinated/composer": "*"
+    }
 }
