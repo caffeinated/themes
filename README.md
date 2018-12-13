@@ -1,44 +1,33 @@
-Caffeinated Themes
-==================
-[![Laravel 5.3](https://img.shields.io/badge/Laravel-5.3-orange.svg?style=flat-square)](http://laravel.com)
-[![Laravel 5.4](https://img.shields.io/badge/Laravel-5.4-orange.svg?style=flat-square)](http://laravel.com)
-[![Laravel 5.5](https://img.shields.io/badge/Laravel-5.5-orange.svg?style=flat-square)](http://laravel.com)
-[![Laravel 5.6](https://img.shields.io/badge/Laravel-5.6-orange.svg?style=flat-square)](http://laravel.com)
-[![Source](http://img.shields.io/badge/source-caffeinated/themes-blue.svg?style=flat-square)](https://github.com/caffeinated/themes)
-[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
+# Caffeinated Theme
+[![Source](https://img.shields.io/badge/source-caffeinated/theme-blue.svg?style=flat-square)](https://github.com/caffeinated/theme)
+[![Latest Stable Version](https://poser.pugx.org/caffeinated/theme/v/stable?format=flat-square)](https://packagist.org/packages/caffeinated/theme)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
+[![Total Downloads](https://img.shields.io/packagist/dt/caffeinated/theme.svg?style=flat-square)](https://packagist.org/packages/caffeinated/theme)
 
-Caffeinated Themes gives the means to group together a set of views and assets for Laravel 5.1 and 5.2. This gives an easy way to further decouple the way your web application looks from your code base.
+Themes gives the means to group together a set of views and assets for Laravel 5.1 and 5.2. This gives an easy way to further decouple the way your web application looks from your code base.
 
-The package follows the FIG standards PSR-1, PSR-2, and PSR-4 to ensure a high level of interoperability between shared PHP code. At the moment the package is not unit tested, but is planned to be covered later down the road.
+## Documentation
+You will find user friendly and updated documentation on the [Caffeinated website](https://caffeinatedpackages.com/guide/packages/theme.html).
 
-Features
---------
-- Supports Caffeinated Modules
-- Intelligent fallback view support
-- Child/parent theme inheritance
-
-Documentation
--------------
-You will find user friendly and updated documentation in the wiki here: [Caffeinated Themes Wiki](https://github.com/caffeinated/themes/wiki)
-
-Quick Installation
-------------------
-Begin by installing the package through Composer.
+## Installation
+Simply install the package through Composer. From here the package will automatically register its service provider and `Theme` facade.
 
 ```
-composer require caffeinated/themes
+composer require caffeinated/theme
 ```
 
-Once this operation is complete, simply add both the service provider and facade classes to your project's `config/app.php` file:
+## Changelog
+You will find a complete changelog history within the [CHANGELOG](CHANGELOG.md) file.
 
-#### Service Provider
-```php
-Caffeinated\Themes\ThemesServiceProvider::class,
-```
+## Contributing
+Please see [Contributing](https://caffeinatedpackages.com/guide/contributing.html) on our website for details.
 
-#### Facade
-```php
-'Theme' => Caffeinated\Themes\Facades\Theme::class,
-```
+## Security
+If you discover any security related issues, please email shea.lewis89@gmail.com directly instead of using the issue tracker.
 
-And that's it! With your coffee in reach, start building some awesome themes!
+## Credits
+- [Shea Lewis](https://github.com/kaidesu)
+- [All Contributors](../../contributors)
+
+## License
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
