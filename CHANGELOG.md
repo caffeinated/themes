@@ -6,6 +6,10 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.3] - 2019-02-04
+### Removed
+- Caffeinated Manifest Composer dependency. This has been merged in and now fully utilizes Laravel's collection class rather than my framework agnostic collection package.
+
 ## [5.0.2] - 2018-12-13
 ### Fixed
 - Composer dependencies
