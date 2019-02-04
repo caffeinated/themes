@@ -3,7 +3,7 @@
 namespace Caffeinated\Themes;
 
 use View;
-use Caffeinated\Manifest\Manifest;
+use Caffeinated\Themes\Manifest;
 use Illuminate\Support\ServiceProvider;
 use Caffeinated\Themes\View\ThemeViewFinder;
 use Caffeinated\Themes\Console\GenerateTheme;
@@ -75,7 +75,7 @@ class ThemesServiceProvider extends ServiceProvider
 			
             foreach ($themes as $theme) {
                 $manifest = new Manifest($theme.'/theme.json');
-                $items[]  = $manifest;
+                $items[]  = collect($manifest->all());
             }
 
             return new Theme($items);
