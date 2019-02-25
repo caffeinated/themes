@@ -4,9 +4,9 @@ namespace Caffeinated\Themes\Support;
 
 use Caffeinated\Themes\Facades\Theme;
 use Caffeinated\Themes\Concerns\GetsManifest;
-use Caffeinated\Modules\Support\ServiceProvider as LaravelServiceProvider;
+use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
-class ServiceProvider extends LaravelServiceProvider
+class ServiceProvider extends IlluminateServiceProvider
 {
     use GetsManifest;
 
