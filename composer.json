@@ -9,10 +9,12 @@
             "email": "shea.lewis89@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "^7.1.3",
         "caffeinated/composer-installers": "*",
-        "illuminate/support": "5.7.x"
+        "illuminate/support": "5.8.*"
     },
     "autoload": {
         "files": [
