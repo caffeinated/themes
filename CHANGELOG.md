@@ -6,6 +6,10 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0] - 2019-08-06
+### Added
+- Laravel 6 support
+
 ## [5.0.4] - 2019-02-25
 ### Fixed
 - Service provider properly extends the Laravel service provider base class
