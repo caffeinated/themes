@@ -2,6 +2,7 @@
 
 namespace Caffeinated\Themes;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Caffeinated\Themes\Concerns\RegistersViewLocations;
 
@@ -116,7 +117,7 @@ class Theme extends Collection
      */
     protected function format($name)
     {
-        return ucfirst(camel_case($name));
+        return ucfirst(Str::camel($name));
     }
 
     /**
