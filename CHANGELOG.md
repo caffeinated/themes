@@ -6,6 +6,11 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0] - 2019-09-05
+### Removed
+- References to deprecated Laravel helper methods
+- Laravel 5 support
+
 ## [6.1.0] - 2019-08-06
 ### Added
 - Laravel 6 support
