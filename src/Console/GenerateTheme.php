@@ -4,6 +4,7 @@ namespace Caffeinated\Themes\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Str;
 
 class GenerateTheme extends Command
 {
@@ -73,7 +74,7 @@ class GenerateTheme extends Command
      */
     protected function getOptions()
     {
-        $slug   = str_slug($this->argument('slug'));
+        $slug   = \Str::slug($this->argument('slug'));
         $name   = $this->format($slug);
         $quick  = $this->option('quick');
         $vendor = config('themes.vendor');
@@ -133,6 +134,6 @@ class GenerateTheme extends Command
      */
     private function format($name)
     {
-        return ucfirst(camel_case($name));
+        return ucfirst(\Str::camel($name));
     }
 }
