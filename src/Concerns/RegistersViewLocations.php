@@ -2,6 +2,8 @@
 
 namespace Caffeinated\Themes\Concerns;
 
+use Illuminate\Support\Facades\Str;
+
 trait RegistersViewLocations
 {
     /**
@@ -66,6 +68,6 @@ trait RegistersViewLocations
      */
     protected function format($name)
     {
-        return ucfirst(camel_case($name));
+        return ucfirst(Str::camel($name));
     }
 }
