@@ -2,7 +2,7 @@
 
 namespace Caffeinated\Themes\Concerns;
 
-use Illuminate\Support\Facades\Str;
+use Illuminate\Support\Str;
 
 trait RegistersViewLocations
 {
