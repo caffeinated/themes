@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('theme_path')) {
+if (! function_exists('theme_path')) {
     /**
      * Return the path to the given theme file.
      *
