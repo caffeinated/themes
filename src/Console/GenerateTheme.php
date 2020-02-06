@@ -40,7 +40,7 @@ class GenerateTheme extends Command
     public function handle()
     {
         $options     = $this->getOptions();
-        $root = base_path('themes');
+        $root        = base_path('themes');
         $stubsPath   = __DIR__ . '/../../resources/stubs/theme';
         $slug        = $options['slug'];
         $name        = $this->format($slug);
@@ -128,7 +128,7 @@ class GenerateTheme extends Command
 
     /**
      * Format the given name as the directory basename.
-     * 
+     *
      * @param  string  $name
      * @return string
      */

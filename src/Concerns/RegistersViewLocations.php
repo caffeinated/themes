@@ -62,7 +62,7 @@ trait RegistersViewLocations
 
     /**
      * Format the name of the theme name to reference the correct directory.
-     * 
+     *
      * @param  string  $name
      * @return string
      */

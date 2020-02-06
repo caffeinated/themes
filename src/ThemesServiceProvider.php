@@ -39,7 +39,7 @@ class ThemesServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
 		    __DIR__.'/../config/themes.php', 'themes'
 		);
-		
+
 		$this->registerServices();
 		$this->registerNamespaces();
 
@@ -72,7 +72,7 @@ class ThemesServiceProvider extends ServiceProvider
                     $themes = $this->app['files']->directories($path);
                 }
 			}
-			
+
             foreach ($themes as $theme) {
                 $manifest = new Manifest($theme.'/theme.json');
                 $items[]  = collect($manifest->all());

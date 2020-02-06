@@ -6,6 +6,10 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.1.0] - 2020-02-06
+### Changed
+- Refactored autoloader to utilize `spl_autoload_register` natively instead of Composer
+
 ## [7.0.1] - 2019-09-05
 ### Changed
 - PHP 7.2 is now the minimum supported version
