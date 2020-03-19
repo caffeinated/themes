@@ -2,9 +2,9 @@
 
 namespace Caffeinated\Themes\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class GenerateTheme extends Command
 {
