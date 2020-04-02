@@ -6,7 +6,7 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [7.2.0] - 2020-04-02
+## [7.1.0] - 2020-04-02
 ### Added
 - Laravel 7 support
 
@@ -16,9 +16,20 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Experimental Composer installers package
 
-## [7.1.0] - 2020-02-06
+## [7.0.4] - 2020-01-15
 ### Changed
 - Refactored autoloader to utilize `spl_autoload_register` natively instead of Composer
+
+### Fixed
+- References to `Str` facade.
+
+## [7.0.3] - 2020-01-15
+### Removed
+- Additional missed references to deprecated `str_` helper method
+
+## [7.0.2] - 2019-11-27
+### Removed
+- References to deprecated `str_` helper methods
 
 ## [7.0.1] - 2019-09-05
 ### Changed
