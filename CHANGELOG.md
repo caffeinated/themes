@@ -6,6 +6,16 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.2.0] - 2020-04-02
+### Added
+- Laravel 7 support
+
+### Fixed
+- Error pages (`errors/404.blade.php`) can now properly be overridden by your themes
+
+### Removed
+- Experimental Composer installers package
+
 ## [7.1.0] - 2020-02-06
 ### Changed
 - Refactored autoloader to utilize `spl_autoload_register` natively instead of Composer

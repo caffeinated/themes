@@ -47,6 +47,7 @@ class ThemeViewFinder extends FileViewFinder
         $theme = Theme::getCurrent();
 
         $hints   = array_reverse($this->hints[$namespace]);
+        $hints[] = Theme::path('resources/views/'.$namespace);
         $hints[] = Theme::path('resources/views/vendor/'.$namespace);
 
         if (class_exists(\Caffeinated\Modules\ModulesServiceProvider::class)) {
