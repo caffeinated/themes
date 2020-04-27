@@ -2,8 +2,8 @@
 
 namespace Caffeinated\Themes\View;
 
-use Theme;
 use Illuminate\View\FileViewFinder;
+use Caffeinated\Themes\Facades\Theme;
 
 class ThemeViewFinder extends FileViewFinder
 {
