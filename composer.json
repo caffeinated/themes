@@ -1,5 +1,5 @@
 {
-    "name": "caffeinated/themes",
+    "name": "dalholm/themes",
     "description": "Laravel Themes",
     "keywords": ["themes", "laravel", "caffeinated", "blade"],
     "license": "MIT",
@@ -7,6 +7,10 @@
         {
             "name": "Shea Lewis",
             "email": "shea.lewis89@gmail.com"
+        },
+        {
+            "name": "Mikael Dalholm",
+            "email": "mikael@dalholm.se"
         }
     ],
     "minimum-stability": "dev",
