@@ -6,6 +6,10 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.2.0] - 2021-03-24
+### Added
+- Laravel 8 support
+
 ## [7.1.1] - 2020-04-27
 ### Fixed
 - Reference full namespace path to `Theme` facade
